@@ -1,0 +1,9 @@
+{
+	"id": "calendar-plus",
+	"name": "Calendar Plus",
+	"version": "0.1.0",
+	"minAppVersion": "1.10.0",
+	"description": "Calendar for your periodic notes, extensible by other plugins: daily, weekly, monthly, quarterly, semestral and yearly.",
+	"author": "Alex Ojeda",
+	"isDesktopOnly": false
+}
