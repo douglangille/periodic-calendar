@@ -3,27 +3,37 @@
  *
  * Stability: this file is the published interface. Breaking changes require
  * bumping `CalendarPlusApi.version` and keeping the previous shape working for
- * at least one minor release.
+ * at least one minor release. It is still `1` because the plugin has not shipped
+ * yet: the revisions below were made before any external consumer existed.
  *
  * Consumers should copy this file (or its published .d.ts) rather than import
  * from the plugin, and must always degrade gracefully when Calendar Plus is
  * absent — see `getCalendarPlusApi` in the README for the recommended pattern.
  */
 
-import type { Menu } from 'obsidian';
-
-/** `moment` is provided globally by Obsidian; we only need the type here. */
-type Moment = ReturnType<typeof window.moment>;
+import type { Menu, TFile } from 'obsidian';
 
 /**
- * A period a calendar cell can represent. `day` and `week` are the ones the
- * month grid renders; the coarser ones are reachable from the header.
+ * `moment` is provided globally by Obsidian; we only need the type here.
+ * Exported so consumers implementing `CalendarSource` by hand don't have to
+ * re-derive the same expression.
+ */
+export type Moment = ReturnType<typeof window.moment>;
+
+/**
+ * A period a calendar cell can represent. `day` and `week` are rendered by the
+ * month grid; the coarser ones are the header's period buttons. Sources are
+ * consulted for all of them.
  */
 export type Granularity = 'day' | 'week' | 'month' | 'quarter' | 'semester' | 'year';
 
 /** A small colored marker rendered inside a calendar cell. */
 export interface Dot {
-	/** Appended to the dot element's class list, for CSS targeting. */
+	/**
+	 * Appended to the dot element's class list, for CSS targeting. It is
+	 * namespaced with the source id before reaching the DOM, so two sources
+	 * cannot collide, and characters invalid in a class name are stripped.
+	 */
 	className?: string;
 	/**
 	 * A CSS color *value or variable*, e.g. `var(--color-accent)`.
@@ -34,16 +44,47 @@ export interface Dot {
 	isFilled?: boolean;
 }
 
+/**
+ * One figure in the calendar's footer, contributed by a source for the period on
+ * display. Keep it to a glanceable number: the footer is a strip, not a report.
+ */
+export interface SummaryCard {
+	/** Short label, sentence case — "Notes", "Tasks done". */
+	label: string;
+	/** The figure, already formatted for display: "23", "14.2k", "3 days". */
+	value: string;
+	/** Lucide icon id, optional. */
+	icon?: string;
+	/** Fuller detail on hover. Plain text. */
+	tooltip?: string;
+	/**
+	 * Called when the card is clicked. Omit it and the card is not interactive —
+	 * a card that looks clickable and does nothing is worse than a plain one.
+	 */
+	onClick?(): void;
+}
+
 /** What a source contributes to a single calendar cell. */
 export interface CellMetadata {
 	/** Markers to render in the cell. Keep it to a handful; space is tight. */
 	dots?: Dot[];
 	/**
-	 * A magnitude for this cell. The calendar may render it as a number or map
-	 * it to a background intensity, depending on the user's display settings.
+	 * A magnitude for this cell. Depending on the user's display setting it is
+	 * rendered as a number or as a background intensity.
 	 */
 	value?: number;
-	/** Extra classes on the cell element, for CSS targeting. */
+	/**
+	 * The maximum `value` is measured against when rendering intensity. Supply it
+	 * when you know your own range — say 100 for a percentage — and the shading
+	 * stays stable as the user moves between months. Without it the calendar
+	 * scales against the largest value currently on screen, which means the same
+	 * number can shade differently in different months.
+	 */
+	valueScale?: number;
+	/**
+	 * Extra classes on the cell element, for CSS targeting. Namespaced with the
+	 * source id and sanitized, like `Dot.className`.
+	 */
 	classes?: string[];
 	/** Tooltip text, shown on hover. Plain text, no markup. */
 	tooltip?: string;
@@ -54,7 +95,16 @@ export interface CellMetadata {
  *
  * Sources are called once per visible cell on every render, so `getMetadata`
  * must be cheap: read from an in-memory index, never scan the vault. Returning
- * a promise is allowed; the cell updates when it resolves.
+ * a promise is allowed; the cell updates when it resolves, unless a newer
+ * repaint has already superseded it.
+ *
+ * A source that throws is caught and skipped for that cell. One that throws on
+ * every cell of a pass is degraded — it stops being queried until the next
+ * `refresh()` naming it — so a broken source can never take the calendar down.
+ *
+ * **How contributions combine** when several sources answer for the same cell,
+ * in registration order: dots are concatenated, classes are concatenated,
+ * tooltips are joined with newlines, and values are **summed**.
  */
 export interface CalendarSource {
 	/** Stable, unique. Convention: the contributing plugin's id. */
@@ -72,19 +122,48 @@ export interface CalendarSource {
 	): CellMetadata | null | Promise<CellMetadata | null>;
 
 	/**
+	 * Whether this source would accept a drop of `evt`'s payload. Called on
+	 * dragover to decide if the cell should present itself as a drop target, so
+	 * it must be synchronous and cheap. Omit it and the source is assumed
+	 * interested in every drag, which makes cells look droppable for payloads
+	 * nobody will take.
+	 */
+	canDrop?(date: Moment, granularity: Granularity, evt: DragEvent): boolean;
+
+	/**
 	 * Called when something is dropped on a calendar cell. Return `true` if the
 	 * drop was handled, which stops other sources from receiving it.
-	 * Inspect `evt.dataTransfer` to decide whether the payload is yours.
 	 */
 	onDrop?(date: Moment, granularity: Granularity, evt: DragEvent): boolean;
 
 	/** Add items to a cell's context menu. Called before the menu is shown. */
 	onContextMenu?(date: Moment, granularity: Granularity, menu: Menu): void;
+
+	/**
+	 * Figures for the footer, covering `from`..`to` inclusive — the period the
+	 * calendar is displaying. Called once per repaint, not once per cell, so it
+	 * may be a little more expensive than `getMetadata`; still read from memory.
+	 *
+	 * Return `null` to contribute nothing. Sources that implement it show up in
+	 * the footer only while they are enabled, like any other contribution.
+	 */
+	getSummary?(
+		from: Moment,
+		to: Moment
+	): SummaryCard[] | null | Promise<SummaryCard[] | null>;
 }
 
 /** Events a consumer can subscribe to. */
 export interface CalendarPlusEvents {
-	'day-click': (date: Moment, granularity: Granularity, evt: MouseEvent) => void;
+	/**
+	 * A cell was activated, by mouse or by keyboard. Fires for every
+	 * granularity, not only days — check `granularity`.
+	 */
+	'cell-click': (
+		date: Moment,
+		granularity: Granularity,
+		evt: MouseEvent | KeyboardEvent
+	) => void;
 	'month-change': (displayedMonth: Moment) => void;
 	/** Fired after a drop was accepted by some source. */
 	'date-drop': (date: Moment, granularity: Granularity) => void;
@@ -97,20 +176,54 @@ export interface CalendarPlusApi {
 	/**
 	 * Register a source. Returns an unregister function — call it in your
 	 * plugin's `onunload`, or pass it to `this.register()`.
-	 * Registering an id that already exists replaces the previous source.
+	 * Registering an id that already exists replaces the previous source; the
+	 * superseded unregister function then does nothing.
 	 */
 	registerSource(source: CalendarSource): () => void;
 
 	/**
-	 * Ask the calendar to re-query sources and repaint. Pass a source id to
-	 * signal that only that source's data changed.
+	 * Ask the calendar to re-query sources and repaint. Pass a source id to say
+	 * that only that source's data changed; treat it as a hint rather than a
+	 * guarantee of narrower work. Naming a degraded source also revives it.
+	 *
+	 * A silent no-op when no calendar view is open — there is nothing to repaint.
+	 * It is cheap enough to call unconditionally from a vault listener.
 	 */
 	refresh(sourceId?: string): void;
 
-	/** Scroll/switch the calendar to the period containing `date`. */
+	/**
+	 * The note for a period, or `null` if it does not exist or that granularity
+	 * is not configured. Resolving this yourself would mean re-reading the core
+	 * Daily notes settings and the Periodic Notes plugin's data, so the calendar
+	 * — which already does it — exposes the answer.
+	 */
+	resolveNote(date: Moment, granularity: Granularity): TFile | null;
+
+	/**
+	 * Open the calendar view, or reveal it if it is already open. Resolves once
+	 * the view exists, so `revealDate` right after it will find something to move.
+	 *
+	 * Without this, a consumer wanting to show the calendar would have to hardcode
+	 * the view type — a string outside this contract that could change without a
+	 * version bump.
+	 */
+	openView(): Promise<void>;
+
+	/**
+	 * Switch the calendar to the month containing `date`. A no-op when no calendar
+	 * view is open — `await openView()` first if you need one; applies to all of
+	 * them when several are.
+	 *
+	 * `granularity` only decides which cell takes the keyboard focus: the grid
+	 * always displays a month, so revealing a quarter and revealing a day inside
+	 * it land on the same view.
+	 */
 	revealDate(date: Moment, granularity: Granularity): void;
 
-	/** The month currently displayed, as a moment at its first day. */
+	/**
+	 * The month currently displayed, as a moment at its first day. Answers for
+	 * the first open view, or the current month when none is open.
+	 */
 	getDisplayedMonth(): Moment;
 
 	/** Subscribe to a calendar event. Returns an unsubscribe function. */

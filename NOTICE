@@ -1,0 +1,10 @@
+Calendar Plus
+Copyright (c) 2026 Alex Ojeda Copa
+
+This plugin is a reimplementation of the Calendar plugin for Obsidian
+(https://github.com/liamcain/obsidian-calendar-plugin) by Liam Cain, released
+under the MIT license.
+
+The code is new and shares no source with it. The interaction design, the
+feature set and the CSS class names derive from that work, and the original
+copyright notice is retained in LICENSE in acknowledgement.

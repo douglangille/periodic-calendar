@@ -9,6 +9,17 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedIndexedAccess": true,
 		"moduleResolution": "node",
+		// `tsc` only ever type-checks here; esbuild does the emitting. Declaring it
+		// is what `allowImportingTsExtensions` requires.
+		"noEmit": true,
+		// The unit tests are run by `node --test` straight over the TypeScript, with
+		// native type stripping and no build step. Node resolves those relative
+		// paths itself, so a test may write `./semester.ts` with the extension.
+		"allowImportingTsExtensions": true,
+		// Type stripping erases types without understanding them, so a type
+		// imported as a value would survive into a runtime import that resolves to
+		// nothing. This turns that into a compile error.
+		"verbatimModuleSyntax": true,
 		"isolatedModules": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true,

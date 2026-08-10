@@ -1,12 +1,7 @@
 MIT License
 
 Copyright (c) 2021 Liam Cain
-Copyright (c) 2026 Alex Ojeda
-
-This plugin is a reimplementation of the Calendar plugin for Obsidian
-(https://github.com/liamcain/obsidian-calendar-plugin) by Liam Cain, released
-under the MIT license. The code is new, but the interaction design and feature
-set derive from that work.
+Copyright (c) 2026 Alex Ojeda Copa
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

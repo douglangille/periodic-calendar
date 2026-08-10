@@ -18,5 +18,9 @@ main.js
 # obsidian
 data.json
 
+# Internal notes in Spanish, for the maintainer only. The published documentation
+# is docs/ (English); conventions for agents are in AGENTS.md.
+dev-docs/
+
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
