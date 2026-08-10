@@ -164,6 +164,23 @@ Obsidian is handled by [Hot Reload](https://github.com/pjeby/hot-reload), which
 watches `main.js` from inside the app. Conventions are in
 [`AGENTS.md`](AGENTS.md).
 
+### Testing in your own vault
+
+BRAT installs from a published release, so iterating through it means a tag and a
+release per change. For development, build straight into the vault instead:
+
+```bash
+OBSIDIAN_DEPLOY_TO="$HOME/path/to/YourVault/.obsidian/plugins/calendar-plus" pnpm dev
+```
+
+Every successful build copies `main.js`, `manifest.json` and `styles.css` there,
+plus the `.hotreload` marker, so Hot Reload picks it up. Save, and the change is
+live.
+
+Copying rather than symlinking is deliberate: this repo carries a large
+`node_modules` and a `.git` directory, and a symlink would place both inside a
+vault that iCloud, Dropbox or Syncthing is watching.
+
 ## Credits
 
 The interaction design, the feature set and the CSS class names derive from
