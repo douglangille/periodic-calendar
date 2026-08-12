@@ -39,6 +39,12 @@ export interface CalendarPlusSettings {
 	valueDisplay: ValueDisplay;
 	/** What hovering a cell shows: the note's preview, a summary, or nothing. */
 	hoverMode: HoverMode;
+	/**
+	 * Whether the current defaults for the two settings above have been
+	 * considered for this vault. Written once; see `resolveVisualDefaults` in
+	 * `src/domain/settings.ts` for what it does and does not touch.
+	 */
+	visualDefaultsApplied: boolean;
 	/** The strip of source-contributed cards under the grid. */
 	showFooter: boolean;
 	/** Hard cap on footer cards, so a narrow sidebar cannot be flooded. */
@@ -71,8 +77,13 @@ export const DEFAULT_SETTINGS: CalendarPlusSettings = {
 	showWeekNumbers: true,
 	confirmBeforeCreate: true,
 	showPeriodShortcuts: true,
-	valueDisplay: 'none',
-	hoverMode: 'preview',
+	// A shaded cell is the cheapest way to show a magnitude in a panel where the
+	// cell is the scarce resource, and it is what makes a source registered by
+	// another plugin visible without it having to spend dots. `preview` is still
+	// one keystroke away for anyone who wants Obsidian's own note pop-up.
+	valueDisplay: 'intensity',
+	hoverMode: 'summary',
+	visualDefaultsApplied: false,
 	showFooter: true,
 	maxSummaryCards: 4,
 	disabledSources: [...DEFAULT_DISABLED_SOURCES],

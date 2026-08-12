@@ -66,12 +66,12 @@ const es: Record<keyof typeof en, string> = {
 	settingShortcutsName: 'Mostrar los atajos de periodo',
 	settingShortcutsDesc:
 		'Una fila de botones bajo la cabecera que abre las notas anual, semestral, trimestral y mensual.',
-	settingValueDisplayName: 'Números de las fuentes',
+	settingValueDisplayName: 'Valores de las fuentes',
 	settingValueDisplayDesc:
-		'Cómo se muestra en una celda un valor aportado por otro plugin: oculto, escrito como número, o convertido en intensidad de fondo.',
+		'Cómo se dibuja la magnitud que una fuente aporta a un periodo: como intensidad de fondo, que convierte el mes en un mapa de calor, o como número dentro de la celda. Oculto la descarta del todo, así que una fuente cuya única aportación es un número se vuelve invisible.',
 	settingHoverName: 'Al pasar el ratón por un día',
 	settingHoverDesc:
-		'La vista previa es la ventana emergente que Obsidian muestra para un enlace. El resumen de la celda es un mensaje con lo que las fuentes aportan a ese día, y no muestra la vista previa.',
+		'El resumen de la celda es un mensaje con lo que las fuentes aportan a ese día. La vista previa es la ventana emergente que Obsidian muestra para un enlace, y sustituye al resumen en vez de sumarse a él.',
 	settingWordsPerDotName: 'Palabras por punto',
 	settingWordsPerDotDesc:
 		'Cuántas palabras representa cada punto de la fuente de recuento de palabras.',

@@ -5,13 +5,13 @@ import {
 	type CalendarSurface,
 } from './api/calendar-api';
 import type { CalendarPlusApi, Granularity, SummaryCard } from './api/types';
-import { clampCardLimit, resolveDisabledSources } from './domain/settings';
+import { clampCardLimit, resolveDisabledSources, resolveVisualDefaults } from './domain/settings';
 import {
 	CALENDAR_VIEW_TYPE,
 	CalendarView,
 	type CalendarViewHost,
 } from './calendar/calendar-view';
-import type { CalendarCell } from './calendar/day-cell';
+import type { CalendarCell, HoverMode, ValueDisplay } from './calendar/day-cell';
 import { resetLanguage, t, type TranslationKey } from './i18n';
 import { GRANULARITIES, PeriodicConfigStore } from './periodic/config';
 import { openPeriodicNote } from './periodic/create';
@@ -166,14 +166,28 @@ export default class CalendarPlusPlugin
 		);
 		this.settings.disabledSources = decision.disabledSources;
 		this.settings.sourceDefaultsApplied = true;
+
+		// The two display settings, on the other hand, *are* migrated once — the
+		// combination they used to default to rendered a source's numbers nowhere.
+		// The stored values are read from `record`, not from the merged settings,
+		// where a fresh install is already indistinguishable from the new defaults.
+		const visual = resolveVisualDefaults(
+			record?.visualDefaultsApplied === true,
+			{ valueDisplay: record?.valueDisplay, hoverMode: record?.hoverMode },
+			{ valueDisplay: DEFAULT_SETTINGS.valueDisplay, hoverMode: DEFAULT_SETTINGS.hoverMode }
+		);
+		if (visual.valueDisplay !== null) this.settings.valueDisplay = visual.valueDisplay as ValueDisplay;
+		if (visual.hoverMode !== null) this.settings.hoverMode = visual.hoverMode as HoverMode;
+		this.settings.visualDefaultsApplied = true;
+
 		this.settings.maxSummaryCards = clampCardLimit(
 			this.settings.maxSummaryCards,
 			DEFAULT_SETTINGS.maxSummaryCards,
 			MAX_SUMMARY_CARDS
 		);
-		// The mark is worthless until it is on disk: without this write the next
-		// load would see an unmarked install again and re-run the decision.
-		if (decision.markApplied) await this.saveSettings();
+		// A mark is worthless until it is on disk: without this write the next load
+		// would see an unmarked install again and re-run the decisions.
+		if (decision.markApplied || visual.markApplied) await this.saveSettings();
 
 		this.configs.applySemesterSettings();
 	}

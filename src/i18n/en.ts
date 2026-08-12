@@ -67,12 +67,12 @@ export default {
 	settingShortcutsName: 'Show period shortcuts',
 	settingShortcutsDesc:
 		'A row of buttons under the header that opens the yearly, semester, quarterly and monthly notes.',
-	settingValueDisplayName: 'Numbers from sources',
+	settingValueDisplayName: 'Values from sources',
 	settingValueDisplayDesc:
-		'How a value contributed by another plugin is shown in a cell: hidden, printed as a number, or mapped to a background intensity.',
+		'How a magnitude a source reports for a period is drawn: as a background shade, which turns the month into a heatmap, or as a number in the cell. Hidden drops it entirely, so a source whose only contribution is a number becomes invisible.',
 	settingHoverName: 'Hovering a day shows',
 	settingHoverDesc:
-		'Note preview is the pop-up Obsidian shows for a link. Cell summary is a tooltip with what the sources report for that day, and shows no preview.',
+		'Cell summary is a tooltip with what the sources report for that day. Note preview is the pop-up Obsidian shows for a link, and replaces the summary rather than adding to it.',
 	settingWordsPerDotName: 'Words per dot',
 	settingWordsPerDotDesc: 'How many words each dot of the word count source stands for.',
 	settingsSourcesEmpty:

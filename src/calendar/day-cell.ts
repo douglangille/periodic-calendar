@@ -159,6 +159,9 @@ export class CalendarCell {
 	 * A magnitude for this cell, rendered as a number or as a background
 	 * intensity depending on the user's display setting. `scale` is the value
 	 * that should read as "full"; it defaults to 1 so ratios can be passed in.
+	 *
+	 * Intensity applies to **day cells only** — see the comment at the bucket
+	 * arithmetic below.
 	 */
 	setValue(value: number | null, scale = 1): void {
 		if (this.intensityClass) {
@@ -180,6 +183,13 @@ export class CalendarCell {
 			this.valueEl.setAttribute('aria-hidden', 'true');
 			return;
 		}
+
+		// Intensity is for **day cells only**. A week number is a 2.2em column and
+		// the header's period buttons are wide blocks: shading those alongside the
+		// days turned the grid into stripes and made a whole row read as selected,
+		// which is the opposite of a heatmap. Coarser cells keep their tooltip, which
+		// is where their figure was already available.
+		if (this.granularity !== 'day') return;
 
 		const ratio = scale > 0 ? value / scale : 0;
 		const bucket = Math.min(INTENSITY_BUCKETS, Math.max(1, Math.ceil(ratio * INTENSITY_BUCKETS)));

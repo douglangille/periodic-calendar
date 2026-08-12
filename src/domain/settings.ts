@@ -50,6 +50,54 @@ export function resolveDisabledSources(
 }
 
 /**
+ * The two display settings the first release shipped with, and which the current
+ * defaults replace.
+ *
+ * `none` meant a value contributed by a source was rendered **nowhere** — no
+ * number, no shading — so a source whose whole contribution was a magnitude
+ * looked broken, and `preview` meant hovering a day showed the note rather than
+ * what those sources reported about it. Both are still offered; they are simply
+ * no longer what a calendar starts as.
+ */
+const LEGACY_VALUE_DISPLAY = 'none';
+const LEGACY_HOVER_MODE = 'preview';
+
+/**
+ * Whether the stored display settings should be moved to the current defaults.
+ *
+ * The same one-shot mark as {@link resolveDisabledSources}, and for the same
+ * reason: "never decided" and "deliberately chose the old default" are the same
+ * absence in storage. The difference is what the two settle. Sources are left
+ * exactly as they were, because switching one off silently takes information off
+ * the calendar. These two are *migrated* once, because the old default was the
+ * one combination in which a source's numeric contribution was invisible — a
+ * state nobody chooses on purpose, and the one being reported as "the numbers do
+ * not work".
+ *
+ * Only a value that still equals the old default is moved. Anything else is a
+ * real choice — including `intensity` picked by hand — and is left alone.
+ *
+ * A `null` field means "leave the stored value". Runs at most once per vault:
+ * after it, the mark is on disk and this function answers nothing forever.
+ *
+ * @param alreadyApplied Whether the stored settings carry the mark.
+ * @param stored The stored values, straight off disk, so `unknown`.
+ * @param defaults The current defaults, passed in so this stays import-free.
+ */
+export function resolveVisualDefaults(
+	alreadyApplied: boolean,
+	stored: { valueDisplay: unknown; hoverMode: unknown },
+	defaults: { valueDisplay: string; hoverMode: string }
+): { valueDisplay: string | null; hoverMode: string | null; markApplied: boolean } {
+	if (alreadyApplied) return { valueDisplay: null, hoverMode: null, markApplied: false };
+	return {
+		valueDisplay: stored.valueDisplay === LEGACY_VALUE_DISPLAY ? defaults.valueDisplay : null,
+		hoverMode: stored.hoverMode === LEGACY_HOVER_MODE ? defaults.hoverMode : null,
+		markApplied: true,
+	};
+}
+
+/**
  * A card limit that cannot make the footer nonsensical. Stored settings can hold
  * anything — a hand-edited `data.json`, a control from an older version — and a
  * limit of `NaN` would silently render no cards at all.

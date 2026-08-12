@@ -1,8 +1,15 @@
 import assert from 'node:assert/strict';
 import { describe, it } from 'node:test';
-import { clampCardLimit, compactNumber, resolveDisabledSources } from './settings.ts';
+import {
+	clampCardLimit,
+	compactNumber,
+	resolveDisabledSources,
+	resolveVisualDefaults,
+} from './settings.ts';
 
 const DEFAULTS = ['calendar-plus-word-count', 'calendar-plus-tags'] as const;
+
+const VISUAL = { valueDisplay: 'intensity', hoverMode: 'summary' };
 
 describe('resolveDisabledSources', () => {
 	it('seeds the defaults on a fresh install and asks for the mark to be written', () => {
@@ -52,6 +59,65 @@ describe('resolveDisabledSources', () => {
 	it('drops entries a hand-edited file left behind that are not source ids', () => {
 		const result = resolveDisabledSources(true, true, ['calendar-plus-tags', 7, null], DEFAULTS);
 		assert.deepEqual(result.disabledSources, ['calendar-plus-tags']);
+	});
+});
+
+describe('resolveVisualDefaults', () => {
+	it('moves an install still on the old defaults to the current ones', () => {
+		const result = resolveVisualDefaults(
+			false,
+			{ valueDisplay: 'none', hoverMode: 'preview' },
+			VISUAL
+		);
+		assert.equal(result.valueDisplay, 'intensity');
+		assert.equal(result.hoverMode, 'summary');
+		assert.equal(result.markApplied, true);
+	});
+
+	it('leaves a value the user actually chose alone', () => {
+		const result = resolveVisualDefaults(
+			false,
+			{ valueDisplay: 'number', hoverMode: 'none' },
+			VISUAL
+		);
+		assert.equal(result.valueDisplay, null);
+		assert.equal(result.hoverMode, null);
+		assert.equal(result.markApplied, true);
+	});
+
+	it('migrates the two settings independently', () => {
+		const result = resolveVisualDefaults(
+			false,
+			{ valueDisplay: 'number', hoverMode: 'preview' },
+			VISUAL
+		);
+		assert.equal(result.valueDisplay, null);
+		assert.equal(result.hoverMode, 'summary');
+	});
+
+	it('asks for nothing on a fresh install, where the defaults already apply', () => {
+		const result = resolveVisualDefaults(
+			false,
+			{ valueDisplay: undefined, hoverMode: undefined },
+			VISUAL
+		);
+		assert.equal(result.valueDisplay, null);
+		assert.equal(result.hoverMode, null);
+		// The mark is still written, so the migration cannot run twice.
+		assert.equal(result.markApplied, true);
+	});
+
+	it('never runs again once the mark is there', () => {
+		// The regression the mark exists to prevent: a user who went back to the
+		// note preview must not be switched to the summary again on every load.
+		const result = resolveVisualDefaults(
+			true,
+			{ valueDisplay: 'none', hoverMode: 'preview' },
+			VISUAL
+		);
+		assert.equal(result.valueDisplay, null);
+		assert.equal(result.hoverMode, null);
+		assert.equal(result.markApplied, false);
 	});
 });
 
