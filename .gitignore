@@ -24,3 +24,6 @@ dev-docs/
 
 # Exclude macOS Finder (System Explorer) View States
 .DS_Store
+
+# Local machine configuration: vault paths, never shared.
+.env.local
