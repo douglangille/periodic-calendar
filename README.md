@@ -110,7 +110,12 @@ plugin, each with its own toggle:
 Any plugin can register a source and it gets a toggle in the same list, with no
 configuration and no restart.
 
-<!-- SCREENSHOT: the same month with all three built-in sources on and "Numbers from
+A source that reports a **number** is drawn as a background shade by default, so a
+month reads as a heatmap without any cell spending room on a figure, and hovering a
+cell says what the shade is made of. Both are settings: the shading can become a
+printed number or nothing, and the hover can become Obsidian's note preview.
+
+<!-- SCREENSHOT: the same month with all three built-in sources on and "Values from
      sources" set to intensity, so dots and shaded cells are both visible. Dark
      theme, to show that the plugin follows the theme. -->
 
@@ -164,22 +169,39 @@ Obsidian is handled by [Hot Reload](https://github.com/pjeby/hot-reload), which
 watches `main.js` from inside the app. Conventions are in
 [`AGENTS.md`](AGENTS.md).
 
-### Testing in your own vault
+### Running a local build in your own vault
 
-BRAT installs from a published release, so iterating through it means a tag and a
-release per change. For development, build straight into the vault instead:
+BRAT installs from a published release, which means a tag and a release for every
+change you want to try. To run a local build instead, copy `.env.local.example` to
+`.env.local` and name your vaults there — vault roots, not plugin folders:
 
 ```bash
-OBSIDIAN_DEPLOY_TO="$HOME/path/to/YourVault/.obsidian/plugins/calendar-plus" pnpm dev
+VAULT_TEST=/Users/you/dev/my-obsidian-plugins
+VAULT_REAL=/Users/you/Library/…/YourVault
+VAULT_DEFAULT=TEST
 ```
 
-Every successful build copies `main.js`, `manifest.json` and `styles.css` there,
-plus the `.hotreload` marker, so Hot Reload picks it up. Save, and the change is
-live.
+Then:
 
-Copying rather than symlinking is deliberate: this repo carries a large
-`node_modules` and a `.git` directory, and a symlink would place both inside a
-vault that iCloud, Dropbox or Syncthing is watching.
+```bash
+pnpm dev                          # watch, reinstalling on every save
+pnpm dev --vault=real             # the same, in another vault
+pnpm install:vault --vault=real   # one production build, installed there
+```
+
+Each install copies `main.js`, `manifest.json` and `styles.css` into
+`<vault>/.obsidian/plugins/calendar-plus`, plus the `.hotreload` marker that lets
+[Hot Reload](https://github.com/pjeby/hot-reload) reload the plugin without
+restarting Obsidian. The plugin folder comes from the manifest id, so the same
+`.env.local` works for every plugin you develop.
+
+Two deliberate choices. `pnpm build` never writes to a vault — that is the CI
+path, and installing only happens when you ask for it. And installs copy rather
+than symlink, because a symlink would put this repo's `node_modules` and `.git`
+inside a vault that iCloud, Dropbox or Syncthing is watching; if a vault already
+reaches the repo through a symlink, the install is skipped instead.
+
+Conventions for the codebase are in [`AGENTS.md`](AGENTS.md).
 
 ## Credits
 

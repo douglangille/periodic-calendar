@@ -156,9 +156,23 @@ painted over the current one, so a slow source cannot show last month's data.
 
 ## Numbers, and how they are scaled
 
-Whether `value` is visible at all is the user's **Numbers from sources** setting:
-hidden (the default), printed as a number, or mapped to a background intensity in
-five buckets.
+Whether `value` is visible at all is the user's **Values from sources** setting: a
+background intensity in five buckets (the default), printed as a number, or
+hidden. Since it can be hidden, do not let a `value` be the *only* way your source
+says something important — put it in the `tooltip` too, which the default hover
+mode shows.
+
+A shade costs no room in the cell, which is why a magnitude is usually a better
+contribution than a row of dots: a calendar cell in a sidebar is about twenty
+pixels, and four dots in it are a diagram. Simple Tasks contributes a value and no
+dots for exactly that reason.
+
+**Intensity is applied to day cells only.** A week number is a narrow column and
+the header's period buttons are wide blocks; shading them alongside the days makes
+a whole row read as selected rather than as a heatmap. Your `value` still reaches
+those cells — it is summed, it is in the accessible name, and it is printed there
+in *number* mode — but at coarse granularities the shade is deliberately not drawn.
+If a coarse cell has something to say, say it in the `tooltip` too.
 
 `valueScale` decides what the intensity is measured against, and picking right
 matters:

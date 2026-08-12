@@ -132,8 +132,27 @@ Word count and tags ship **off** because they are demonstrations of the public
 API as much as features — useful, but not what most people want painted over
 their month by default. Turn them on and they appear immediately.
 
+A source that reports a **number** rather than dots is drawn as a background
+shade, which is the **Values from sources** setting and defaults to intensity:
+five buckets of the accent colour, so a month reads as a heatmap without any cell
+having to spend room on a figure. Switch it to *number* to print the figure
+instead, or to *hidden* to drop it — with the caveat that a source whose only
+contribution is a number then shows nothing at all.
+
+The shading applies to **day cells only**. Week numbers and the period buttons are
+a narrow column and wide blocks; shading those alongside the days turns the grid
+into stripes and makes a whole row read as selected. They still carry their
+period's figure in the tooltip, and a *number* is printed on them normally.
+
+The period whose note you have open is marked with a **ring**, not a filled cell.
+A solid accent cell is indistinguishable from the darkest shade of a heatmap, so
+"the note I am reading" and "my busiest day" would be the same picture; the ring
+sits on top of any shade without hiding it. Today keeps its accent-coloured number
+underneath, and a cell that would accept the drag in progress gets a dashed
+outline, so the three states never look alike.
+
 <!-- SCREENSHOT: the same month with all three built-in sources enabled and
-     "Numbers from sources" set to intensity, so the dots and the shaded cells are
+     "Values from sources" set to intensity, so the dots and the shaded cells are
      both visible. Dark theme, to show the theme following. -->
 
 **Sources are the point of the plugin.** Any plugin can register one, and when it
@@ -163,20 +182,25 @@ an optional icon and an optional tooltip — for the month on display. Not for t
 A card you can click does something; one you cannot is a plain figure, and it
 looks like one.
 
-The strip is a grid that drops to fewer columns as the sidebar narrows and wraps
-onto another line rather than hiding cards behind a horizontal scroller. The
-**Maximum cards** setting is what bounds how many lines it can ever take. A month
-with nothing to report shows no footer at all rather than an empty stripe.
+They are drawn as **small cards** — a figure with its label under it — in a grid
+that drops to fewer columns as the sidebar narrows and wraps rather than hiding
+cards behind a horizontal scroller. Small on purpose: the calendar is what the
+panel is for, and the first version's large numbers in roomy boxes took as much
+height as two weeks of the grid. The **Maximum cards** setting bounds how many
+lines the strip can ever take, and a month with nothing to report shows no footer
+at all rather than an empty stripe.
 
 ## Hovering
 
 The **Hovering a day shows** setting has three values:
 
-- **The note's preview** (default) — Obsidian's own page preview popover, the same
-  one you get hovering a link. The cell's tooltip stays the bare period label,
-  because a tooltip under a popover is noise.
-- **A summary** — no popover; the tooltip carries the period label plus whatever
-  the sources reported for that cell.
+- **The cell summary** (default) — no popover; the tooltip carries the period
+  label plus whatever the sources reported for that cell. This is what tells you
+  what a shaded cell is shaded *for*.
+- **The note's preview** — Obsidian's own page preview popover, the same one you
+  get hovering a link. The cell's tooltip drops back to the bare period label,
+  because a tooltip under a popover is noise — so this replaces the summary rather
+  than adding to it.
 - **Nothing** — no popover and no tooltip.
 
 Screen readers are not part of this trade-off: the full text is always available

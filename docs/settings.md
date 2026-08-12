@@ -27,12 +27,20 @@ it to match how you want `gggg-[W]ww` resolved.
 |---|---|---|
 | **Confirm before creating a note** | On | Asks before creating a note that does not exist. Off means a click on an empty day creates it immediately. |
 | **Show period shortcuts** | On | The `2026 · S2 · Q3 · Aug` row above the grid. Only configured periods appear in it. |
-| **Numbers from sources** | Hidden | What to do with the numeric value sources report: **hidden**, printed as a **number** in the cell, or mapped to a background **intensity** in five buckets. Values from several sources are summed. |
-| **Hovering a day shows** | The note's preview | **The note's preview** (Obsidian's page preview popover), **a summary** (a tooltip with what the sources report), or **nothing**. See [Hovering](user-guide.md#hovering). |
+| **Values from sources** | Background intensity | What to do with the numeric value sources report: mapped to a background **intensity** in five buckets, printed as a **number** in the cell, or **hidden**. Values from several sources are summed. The intensity is drawn on day cells only — see [Sources](user-guide.md#sources). |
+| **Hovering a day shows** | The cell summary | **The cell summary** (a tooltip with what the sources report for that period), **the note's preview** (Obsidian's page preview popover), or **nothing**. See [Hovering](user-guide.md#hovering). |
 
-"Numbers from sources" defaults to hidden because the built-in sources that report
-numbers ship off; turn on **Word count** and switch this to number or intensity to
-see the effect.
+These two defaults changed after the first release, and an existing vault is
+**migrated once**:
+if it was still on hidden and on the note preview — the old defaults — it moves to
+the new ones. A value you had chosen yourself is left alone, and the migration
+never runs twice, so switching back to the preview is permanent.
+
+The reason is that hidden plus preview was the one combination in which a source
+whose whole contribution is a magnitude showed **nothing at all**: no number, no
+shading, and no tooltip either, since the preview replaces it. Intensity turns the
+month into a heatmap, which is what a magnitude per day is for, and the summary is
+what tells you which magnitude you are looking at.
 
 ## Sources
 
