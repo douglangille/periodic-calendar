@@ -8,11 +8,6 @@ above the grid to reach the month, quarter, semester and year. Periodic Calendar
 the configuration you already have in core **Daily notes** and in the **Periodic
 Notes** plugin, so there is nothing to set up twice.
 
-<!-- SCREENSHOT (hero): the calendar in the right sidebar of a real vault — month
-     grid with week numbers, the period shortcut row "2026 · S2 · Q3 · Aug", dots on
-     days that have notes, and two or three footer cards. Light theme, ~300 px wide.
-     This is the image that sells the plugin; it goes right here. -->
-
 ## Why this exists
 
 [Calendar](https://github.com/liamcain/obsidian-calendar-plugin) by Liam Cain is
@@ -116,14 +111,6 @@ A source that reports a **number** is drawn as a background shade by default, so
 month reads as a heatmap without any cell spending room on a figure, and hovering a
 cell says what the shade is made of. Both are settings: the shading can become a
 printed number or nothing, and the hover can become Obsidian's note preview.
-
-<!-- SCREENSHOT: the same month with all three built-in sources on and "Values from
-     sources" set to intensity, so dots and shaded cells are both visible. Dark
-     theme, to show that the plugin follows the theme. -->
-
-<!-- SCREENSHOT: the Sources section of the settings tab, showing the three built-in
-     toggles plus one registered by another plugin — the evidence for the claim
-     above. -->
 
 ## Documentation
 
