@@ -1,4 +1,5 @@
 import obsidianmd from 'eslint-plugin-obsidianmd';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
 import { globalIgnores, defineConfig } from 'eslint/config';
 
@@ -33,6 +34,11 @@ export default defineConfig(
 	// `recommendedWithLocalesEn` adds the sentence-case check for English locale
 	// modules — `src/i18n/en.ts`, where every visible string now lives.
 	...obsidianmd.configs.recommendedWithLocalesEn,
+	// The type-aware half of what community.obsidian.md runs, which the obsidianmd
+	// config does not bring along on its own. Without it the repo lints clean while
+	// the directory's scan reports `no-unsafe-*` warnings on the public scorecard.
+	// Any exemption for tests must stay *after* this.
+	...tseslint.configs.recommendedTypeChecked,
 	{
 		// Names the linter must not "correct": they are spelled this way in
 		// Obsidian's own interface, in the Periodic Notes plugin and in our manifest.

@@ -126,7 +126,10 @@ export class CalendarView extends ItemView implements HoverParent {
 		return t('viewTitle');
 	}
 
-	protected override async onOpen(): Promise<void> {
+	// Not `async`: there is nothing to await in here, and the linter the community
+	// directory runs reports an async function without an `await` as a promise that
+	// promises nothing. Obsidian only needs the `Promise` back.
+	protected override onOpen(): Promise<void> {
 		const root = this.contentEl.createDiv({ cls: 'container periodic-calendar-view' });
 		root.toggleClass('is-mobile', Platform.isMobile);
 		this.headerEl = root.createDiv({ cls: 'periodic-calendar-header' });
@@ -160,9 +163,13 @@ export class CalendarView extends ItemView implements HoverParent {
 		this.registerInterval(window.setInterval(() => void this.tick(), HEARTBEAT_MS));
 
 		this.repaint();
+		return Promise.resolve();
 	}
 
-	protected override async onClose(): Promise<void> {
+	// Not `async`: there is nothing to await in here, and the linter the community
+	// directory runs reports an async function without an `await` as a promise that
+	// promises nothing. Obsidian only needs the `Promise` back.
+	protected override onClose(): Promise<void> {
 		this.dropTarget = null;
 		this.grid = null;
 		this.headerCells = [];
@@ -170,6 +177,7 @@ export class CalendarView extends ItemView implements HoverParent {
 		this.gridEl = null;
 		this.footerEl = null;
 		this.contentEl.empty();
+		return Promise.resolve();
 	}
 
 	// ---------------------------------------------------------------- public API
