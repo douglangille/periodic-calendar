@@ -22,7 +22,14 @@
 	--color-text-title: var(--text-normal);
 	--color-text-heading: var(--text-muted);
 	--color-text-day: var(--text-normal);
-	--color-text-today: var(--interactive-accent);
+	/* Today is a filled pill: the accent is its background and the text on it is
+	   the inverted one. `--color-text-today` keeps meaning "the colour today's
+	   number is written in", which is what a snippet overriding it expects. */
+	--color-background-today: var(--interactive-accent);
+	--color-text-today: var(--text-on-accent);
+	/* The selection ring. Deliberately not the accent: that is the heatmap's
+	   colour, and a ring in it vanishes over a shaded cell. */
+	--color-active-ring: var(--text-normal);
 	--color-text-weeknum: var(--text-muted);
 	/*
 	 * The calendar lives in a sidebar the user can drag to any width, so what has
@@ -259,9 +266,29 @@
 	background-color: var(--background-modifier-hover);
 }
 
-.calendar-plus-view .day.today {
+/*
+ * Today: a **pill around the number**, not a coloured number.
+ *
+ * Tinting the digit was the original Calendar's mark and it disappeared here:
+ * the heatmap shades whole cells in the very same accent, so on a busy day the
+ * accent-coloured number was one accent on top of another and today read like
+ * any other cell. The pill is a *shape*, drawn inside the cell and over
+ * whatever shade it carries, so it survives an empty day and the darkest bucket
+ * alike — and it never competes with the ring below, which marks something
+ * else entirely.
+ */
+.calendar-plus-view .day.today .calendar-plus-text {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.65em;
+	height: 1.65em;
+	padding: 0 var(--size-2-1);
+	border-radius: var(--radius-l);
+	background-color: var(--color-background-today);
 	color: var(--color-text-today);
 	font-weight: var(--font-bold);
+	line-height: 1;
 }
 
 .calendar-plus-view .day.adjacent-month {
@@ -269,20 +296,26 @@
 }
 
 /*
- * The period whose note is open: a **ring**, not a fill.
+ * The period whose note is open: a **ring**, not a fill — and a ring in a
+ * neutral colour, not in the accent.
  *
- * It used to be a solid accent block, which is the original Calendar's look and
- * was right there — but with a heatmap underneath it, a solid accent cell is
- * indistinguishable from the darkest shade of that heatmap, so "the note you are
- * reading" and "your busiest day" became the same picture. A ring sits on top of
- * any shade without replacing it, and the cell keeps its own text colour, so
- * today stays accent-coloured underneath it.
+ * A fill was the original Calendar's look, and it lost against the heatmap: a
+ * solid accent cell is indistinguishable from the darkest bucket, so "the note
+ * you are reading" and "your busiest day" became the same picture. Drawing the
+ * ring in the accent only moved the collision to the outline — an accent
+ * contour over an accent shade is a border nobody can see at a glance.
+ *
+ * So the ring is drawn in the text colour instead. The heatmap owns the accent
+ * and everything painted in it reads as *volume*; selection is the one mark
+ * that must be readable on every shade, and a neutral contour is legible over
+ * all five buckets and over an empty cell. Today keeps its accent pill inside,
+ * so a day that is both shows both marks without either explaining the other.
  */
 .calendar-plus-view .day.active,
 .calendar-plus-view .day.active.today,
 .calendar-plus-view .week-num.active,
 .calendar-plus-view .calendar-plus-period.active {
-	box-shadow: inset 0 0 0 2px var(--interactive-accent);
+	box-shadow: inset 0 0 0 2px var(--color-active-ring);
 	font-weight: var(--font-semibold);
 }
 

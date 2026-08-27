@@ -274,9 +274,22 @@ The `--color-*` indirection is the intended override point:
 .calendar-plus-view {
 	--color-background-weekend: var(--background-secondary);
 	--color-dot: var(--color-green);
-	--color-text-today: var(--color-orange);
+	--color-background-today: var(--color-orange);
+	--color-text-today: var(--text-on-accent);
+	--color-active-ring: var(--color-orange);
 }
 ```
+
+Two of those deserve a note, because they are what tells the two marked days
+apart:
+
+- **today** is a filled pill around the day number —
+  `--color-background-today` paints it and `--color-text-today` is the number
+  written on it;
+- **the day whose note is open** is a ring around the whole cell, in
+  `--color-active-ring`. It defaults to the text colour rather than the accent
+  on purpose: the accent belongs to the heatmap, and a ring painted in it is
+  invisible over a shaded cell.
 
 To restyle one source's dots, use the namespaced class:
 

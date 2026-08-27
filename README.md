@@ -75,8 +75,10 @@ Open the calendar from the ribbon icon or the **Open view** command.
 
 The row above the grid — `2026 · S2 · Q3 · Aug`, widest period first — reaches the
 year, semester, quarter and month notes. Only the periods you have configured
-appear in it. Today's highlight follows the clock across midnight without a reload,
-and the day of the note you are editing is highlighted too.
+appear in it. Today is marked with a filled pill around its number and follows the
+clock across midnight without a reload; the day of the note you are editing wears a
+ring around the whole cell. Two different marks on purpose — the heatmap owns the
+accent colour, so neither of them is drawn in it.
 
 ### The six periods
 
