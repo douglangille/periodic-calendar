@@ -36,8 +36,8 @@ It also adds **all six periodic-note levels**, not just daily and weekly.
 
 ## Install
 
-**From the community catalog** — not there yet; this plugin has not been submitted
-for review. Once it is: Settings → Community plugins → Browse → "Periodic Calendar".
+**From the community catalog** — submitted and awaiting listing. Once it is
+through: Settings → Community plugins → Browse → "Periodic Calendar".
 
 **With BRAT**, which is how to try it today:
 
