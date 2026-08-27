@@ -1,6 +1,6 @@
 {
 	"name": "calendar-plus",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "Obsidian calendar for periodic notes, extensible by other plugins",
 	"main": "main.js",
 	"type": "module",
