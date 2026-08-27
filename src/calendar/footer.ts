@@ -38,16 +38,16 @@ function renderCard(parent: HTMLElement, card: SummaryCard): void {
 	// A card is only a button when there is something to press. One that looks
 	// interactive and does nothing is worse than a plain figure.
 	const interactive = typeof card.onClick === 'function';
-	const el = parent.createEl(interactive ? 'button' : 'div', { cls: 'calendar-plus-card' });
+	const el = parent.createEl(interactive ? 'button' : 'div', { cls: 'periodic-calendar-card' });
 	el.toggleClass('is-interactive', interactive);
 
-	const figure = el.createDiv({ cls: 'calendar-plus-card-figure' });
+	const figure = el.createDiv({ cls: 'periodic-calendar-card-figure' });
 	if (card.icon) {
-		const icon = figure.createSpan({ cls: 'calendar-plus-card-icon' });
+		const icon = figure.createSpan({ cls: 'periodic-calendar-card-icon' });
 		setIcon(icon, card.icon);
 	}
-	figure.createSpan({ cls: 'calendar-plus-card-value', text: card.value });
-	el.createSpan({ cls: 'calendar-plus-card-label', text: card.label });
+	figure.createSpan({ cls: 'periodic-calendar-card-value', text: card.value });
+	el.createSpan({ cls: 'periodic-calendar-card-label', text: card.label });
 
 	// No `aria-label` here on purpose. Obsidian's tooltip and the accessible name
 	// share that attribute, so setting both would mean one of them losing; the
@@ -61,7 +61,7 @@ function renderCard(parent: HTMLElement, card: SummaryCard): void {
 			card.onClick?.();
 		} catch (error) {
 			// A consumer's callback is not allowed to take the calendar down.
-			console.error('Calendar Plus: a summary card click handler threw', error);
+			console.error('Periodic Calendar: a summary card click handler threw', error);
 		}
 	});
 }

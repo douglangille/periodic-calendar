@@ -58,7 +58,7 @@ export function renderMonthGrid(container: HTMLElement, spec: MonthGridSpec): Mo
 	// A col per weekday so the `weekend` class can tint whole columns, exactly
 	// as the original plugin does.
 	const colgroup = table.createEl('colgroup');
-	if (spec.showWeekNumbers) colgroup.createEl('col', { cls: 'calendar-plus-week-col' });
+	if (spec.showWeekNumbers) colgroup.createEl('col', { cls: 'periodic-calendar-week-col' });
 	const firstWeek = weeks[0] ?? [];
 	for (const day of firstWeek) {
 		const col = colgroup.createEl('col');
@@ -67,7 +67,7 @@ export function renderMonthGrid(container: HTMLElement, spec: MonthGridSpec): Mo
 
 	const headRow = table.createEl('thead').createEl('tr');
 	if (spec.showWeekNumbers) {
-		const th = headRow.createEl('th', { cls: 'calendar-plus-week-header' });
+		const th = headRow.createEl('th', { cls: 'periodic-calendar-week-header' });
 		th.setAttribute('aria-label', t('gridWeekColumn'));
 	}
 	for (const [index, day] of firstWeek.entries()) {
@@ -76,8 +76,8 @@ export function renderMonthGrid(container: HTMLElement, spec: MonthGridSpec): Mo
 		// because three letters do not fit a column in a narrow sidebar. `display:
 		// none` keeps the hidden one out of the accessibility tree too, and the
 		// full name is the header's accessible name either way.
-		th.createSpan({ cls: 'calendar-plus-weekday-full', text: labels[index] ?? '' });
-		th.createSpan({ cls: 'calendar-plus-weekday-min', text: labelsMin[index] ?? '' });
+		th.createSpan({ cls: 'periodic-calendar-weekday-full', text: labels[index] ?? '' });
+		th.createSpan({ cls: 'periodic-calendar-weekday-min', text: labelsMin[index] ?? '' });
 		const full = labelsFull[index];
 		if (full) th.setAttribute('aria-label', full);
 		th.toggleClass('weekend', isWeekend(day));
@@ -106,7 +106,7 @@ export function renderMonthGrid(container: HTMLElement, spec: MonthGridSpec): Mo
 
 		if (spec.showWeekNumbers) {
 			const reference = week[0];
-			const td = tr.createEl('td', { cls: 'calendar-plus-week-cell' });
+			const td = tr.createEl('td', { cls: 'periodic-calendar-week-cell' });
 			if (reference) {
 				const cell = new CalendarCell({
 					parent: td,

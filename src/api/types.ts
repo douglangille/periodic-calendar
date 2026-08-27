@@ -1,14 +1,14 @@
 /**
- * Calendar Plus public API — the contract other plugins build against.
+ * Periodic Calendar public API — the contract other plugins build against.
  *
  * Stability: this file is the published interface. Breaking changes require
- * bumping `CalendarPlusApi.version` and keeping the previous shape working for
+ * bumping `PeriodicCalendarApi.version` and keeping the previous shape working for
  * at least one minor release. It is still `1` because the plugin has not shipped
  * yet: the revisions below were made before any external consumer existed.
  *
  * Consumers should copy this file (or its published .d.ts) rather than import
- * from the plugin, and must always degrade gracefully when Calendar Plus is
- * absent — see `getCalendarPlusApi` in the README for the recommended pattern.
+ * from the plugin, and must always degrade gracefully when Periodic Calendar is
+ * absent — see `getPeriodicCalendarApi` in the README for the recommended pattern.
  */
 
 import type { Menu, TFile } from 'obsidian';
@@ -154,7 +154,7 @@ export interface CalendarSource {
 }
 
 /** Events a consumer can subscribe to. */
-export interface CalendarPlusEvents {
+export interface PeriodicCalendarEvents {
 	/**
 	 * A cell was activated, by mouse or by keyboard. Fires for every
 	 * granularity, not only days — check `granularity`.
@@ -169,7 +169,7 @@ export interface CalendarPlusEvents {
 	'date-drop': (date: Moment, granularity: Granularity) => void;
 }
 
-export interface CalendarPlusApi {
+export interface PeriodicCalendarApi {
 	/** Contract version. Check it before using anything below. */
 	readonly version: 1;
 
@@ -227,8 +227,8 @@ export interface CalendarPlusApi {
 	getDisplayedMonth(): Moment;
 
 	/** Subscribe to a calendar event. Returns an unsubscribe function. */
-	on<K extends keyof CalendarPlusEvents>(
+	on<K extends keyof PeriodicCalendarEvents>(
 		event: K,
-		callback: CalendarPlusEvents[K]
+		callback: PeriodicCalendarEvents[K]
 	): () => void;
 }

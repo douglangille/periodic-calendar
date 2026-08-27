@@ -1,5 +1,5 @@
 import { Component, TFile, debounce, type App } from 'obsidian';
-import type { CalendarPlusApi, CalendarSource, CellMetadata, Granularity } from '../api/types';
+import type { PeriodicCalendarApi, CalendarSource, CellMetadata, Granularity } from '../api/types';
 import { t, type TranslationKey } from '../i18n';
 import type { Moment } from '../periodic/resolve';
 
@@ -23,7 +23,7 @@ const MAX_SUMMARY_DAYS = 400;
  */
 export interface SourceContext {
 	readonly app: App;
-	readonly api: CalendarPlusApi;
+	readonly api: PeriodicCalendarApi;
 	/** How many words each dot of the word count source stands for. */
 	getWordsPerDot(): number;
 }

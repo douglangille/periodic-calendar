@@ -18,7 +18,7 @@ export type ValueDisplay = 'none' | 'number' | 'intensity';
 export type HoverMode = 'preview' | 'summary' | 'none';
 
 /**
- * Number of intensity steps. Mirrored by `.calendar-plus-intensity-1…5` in
+ * Number of intensity steps. Mirrored by `.periodic-calendar-intensity-1…5` in
  * `styles.css`; buckets are used instead of an inline background so themes and
  * snippets stay in control of the actual colors.
  */
@@ -107,11 +107,11 @@ export class CalendarCell {
 		this.el.dataset.date = this.date.format('YYYY-MM-DD');
 		this.el.dataset.granularity = this.granularity;
 
-		const text = this.el.createSpan({ cls: 'calendar-plus-text', text: spec.text });
+		const text = this.el.createSpan({ cls: 'periodic-calendar-text', text: spec.text });
 		// The bare number says nothing a screen reader needs; the hidden name below
 		// says all of it, and reading both would just stutter.
 		text.setAttribute('aria-hidden', 'true');
-		this.nameEl = this.el.createSpan({ cls: 'calendar-plus-a11y-name' });
+		this.nameEl = this.el.createSpan({ cls: 'periodic-calendar-a11y-name' });
 		this.dotsEl = this.el.createDiv({ cls: 'dot-container' });
 
 		this.setFlags(spec.flags);
@@ -150,7 +150,7 @@ export class CalendarCell {
 			if (dot.className) el.addClass(dot.className);
 			if (dot.color) {
 				// A dynamic custom property, so themes can still override it.
-				el.style.setProperty('--calendar-plus-dot-color', dot.color);
+				el.style.setProperty('--periodic-calendar-dot-color', dot.color);
 			}
 		}
 	}
@@ -175,7 +175,7 @@ export class CalendarCell {
 
 		if (this.valueDisplay === 'number') {
 			this.valueEl = this.el.createDiv({
-				cls: 'calendar-plus-value',
+				cls: 'periodic-calendar-value',
 				text: String(value),
 			});
 			// The figure is already in the cell's accessible name, through the
@@ -194,7 +194,7 @@ export class CalendarCell {
 		const ratio = scale > 0 ? value / scale : 0;
 		const bucket = Math.min(INTENSITY_BUCKETS, Math.max(1, Math.ceil(ratio * INTENSITY_BUCKETS)));
 		if (value > 0) {
-			this.intensityClass = `calendar-plus-intensity-${String(bucket)}`;
+			this.intensityClass = `periodic-calendar-intensity-${String(bucket)}`;
 			this.el.addClass(this.intensityClass);
 		}
 	}

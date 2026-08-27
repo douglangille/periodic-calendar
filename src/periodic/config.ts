@@ -20,7 +20,7 @@ export const HEADER_GRANULARITIES = ['year', 'semester', 'quarter', 'month'] as 
  * so that an empty `format` in its configuration resolves to the same filename
  * it would produce.
  *
- * `semester` has no Periodic Notes equivalent, so its format is a Calendar Plus
+ * `semester` has no Periodic Notes equivalent, so its format is a Periodic Calendar
  * convention: `{semester}` is our own token and expands to `1` or `2` before the
  * rest of the string is handed to `moment`.
  */
@@ -231,7 +231,7 @@ export class PeriodicConfigStore {
 			const parsed: unknown = JSON.parse(await adapter.read(normalized));
 			return isRecord(parsed) ? parsed : null;
 		} catch (err) {
-			console.warn(`Calendar Plus: could not read ${normalized}`, err);
+			console.warn(`Periodic Calendar: could not read ${normalized}`, err);
 			return null;
 		}
 	}

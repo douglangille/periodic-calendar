@@ -78,7 +78,7 @@ export function periodUid(date: Moment, granularity: Granularity): string {
 }
 
 /**
- * Expands Calendar Plus' own format tokens before `moment` sees the string.
+ * Expands Periodic Calendar' own format tokens before `moment` sees the string.
  *
  * Only `{semester}` exists today. It is replaced by a bracket-escaped digit so
  * `moment` treats it as a literal instead of a format token — there is no
@@ -203,7 +203,7 @@ const LANGUAGE_TO_MOMENT_LOCALE: Record<string, string> = {
 
 /** Pristine week specs, per locale, so `locale` mode can always be restored. */
 interface WeekSpecStore extends Window {
-	_calendarPlusWeekSpecs?: Record<string, unknown>;
+	_periodicCalendarWeekSpecs?: Record<string, unknown>;
 }
 
 /**
@@ -231,7 +231,7 @@ export function applyLocalePreferences(localeOverride: string, weekStart: WeekSt
 	const resolved = moment.locale(target);
 
 	const store = window as WeekSpecStore;
-	const specs = (store._calendarPlusWeekSpecs ??= {});
+	const specs = (store._periodicCalendarWeekSpecs ??= {});
 
 	if (weekStart === 'locale') {
 		// Only restore if we ever changed it; an untouched locale needs no help.

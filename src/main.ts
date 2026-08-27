@@ -4,7 +4,7 @@ import {
 	type CalendarApiHost,
 	type CalendarSurface,
 } from './api/calendar-api';
-import type { CalendarPlusApi, Granularity, SummaryCard } from './api/types';
+import type { PeriodicCalendarApi, Granularity, SummaryCard } from './api/types';
 import { clampCardLimit, resolveDisabledSources, resolveVisualDefaults } from './domain/settings';
 import {
 	CALENDAR_VIEW_TYPE,
@@ -22,12 +22,12 @@ import {
 	type Moment,
 } from './periodic/resolve';
 import {
-	CalendarPlusSettingTab,
+	PeriodicCalendarSettingTab,
 	DEFAULT_DISABLED_SOURCES,
 	DEFAULT_SETTINGS,
 	MAX_SUMMARY_CARDS,
 	isSourceEnabled,
-	type CalendarPlusSettings,
+	type PeriodicCalendarSettings,
 	type SettingsHost,
 	type SourceToggle,
 } from './settings';
@@ -61,15 +61,15 @@ const OPEN_COMMAND_NAMES: Record<Granularity, TranslationKey> = {
 	year: 'commandOpenYearlyNote',
 };
 
-export default class CalendarPlusPlugin
+export default class PeriodicCalendarPlugin
 	extends Plugin
 	implements CalendarViewHost, SettingsHost, CalendarApiHost
 {
-	settings: CalendarPlusSettings = { ...DEFAULT_SETTINGS };
+	settings: PeriodicCalendarSettings = { ...DEFAULT_SETTINGS };
 	configs: PeriodicConfigStore = new PeriodicConfigStore(this.app, () => this.settings);
 
 	private readonly registry = new CalendarApiRegistry(this);
-	private settingTab: CalendarPlusSettingTab | null = null;
+	private settingTab: PeriodicCalendarSettingTab | null = null;
 	/**
 	 * The open in flight, if any. Two calls that overlap share it, so a consumer
 	 * that fires `openView()` twice without awaiting cannot end up with two leaves.
@@ -77,10 +77,10 @@ export default class CalendarPlusPlugin
 	private opening: Promise<void> | null = null;
 
 	/**
-	 * The public API, reachable at `app.plugins.plugins['calendar-plus'].api`.
+	 * The public API, reachable at `app.plugins.plugins['periodic-calendar'].api`.
 	 * See `src/api/types.ts` for the contract.
 	 */
-	readonly api: CalendarPlusApi = this.registry;
+	readonly api: PeriodicCalendarApi = this.registry;
 
 	override async onload(): Promise<void> {
 		// Obsidian's language is read once and cached; clearing it here means a
@@ -100,7 +100,7 @@ export default class CalendarPlusPlugin
 		// Sources before the settings tab: the tab captures the source list when
 		// it is constructed, so a late source would have no toggle.
 		this.addBuiltInSources();
-		this.settingTab = new CalendarPlusSettingTab(this.app, this);
+		this.settingTab = new PeriodicCalendarSettingTab(this.app, this);
 		this.addSettingTab(this.settingTab);
 
 		this.addCommand({
@@ -150,7 +150,7 @@ export default class CalendarPlusPlugin
 		// only honest signal that nobody has ever configured this plugin here.
 		const record =
 			typeof stored === 'object' && stored !== null
-				? (stored as Partial<CalendarPlusSettings>)
+				? (stored as Partial<PeriodicCalendarSettings>)
 				: null;
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, record ?? {});
 

@@ -1,4 +1,4 @@
-# Calendar Plus — conventions for agents
+# Periodic Calendar — conventions for agents
 
 General Obsidian plugin knowledge (API patterns, the `eslint-plugin-obsidianmd`
 rules, CSS/theme rules, submission requirements, the CLI dev loop) lives in the
@@ -36,7 +36,7 @@ Deliberate non-goals:
   **Hot Reload** plugin watching `main.js` — the build never calls the Obsidian
   CLI, because those calls steal window focus (see Verification).
 - The repo is symlinked into the test vault at
-  `~/dev/my-obsidian-plugins/.obsidian/plugins/calendar-plus`.
+  `~/dev/my-obsidian-plugins/.obsidian/plugins/periodic-calendar`.
 - The **original `calendar` plugin is installed in the test vault on purpose**, as
   the reference for parity. Open both side by side and compare.
 - **Never develop against the real vault** (`DiarioZK`).
@@ -61,7 +61,7 @@ src/
 
 It is copied verbatim by consumer plugins. Therefore:
 
-- **Do not change its shape without bumping `CalendarPlusApi.version`.** Adding
+- **Do not change its shape without bumping `PeriodicCalendarApi.version`.** Adding
   an optional field is fine; renaming or removing anything is not.
 - Keep it free of imports from the rest of `src/`. Only `obsidian` types.
 - Every exported member needs a doc comment. This file is the documentation.
@@ -120,7 +120,7 @@ not obvious from the contract and must survive refactors:
 ### `openView()` is the only supported way in, and its promise is a guarantee
 
 The view type is **not** part of the contract, so a consumer that wants to show
-the calendar calls `api.openView()` rather than hardcoding `'calendar-plus'`.
+the calendar calls `api.openView()` rather than hardcoding `'periodic-calendar'`.
 The registry only forwards to the host; the work is `activateView()` in
 `main.ts`, and three things there are load-bearing:
 
@@ -159,7 +159,7 @@ like any day. Anything that iterates cells must go through `getCells()`.
 They also go through the **same delegated listeners** as the grid. `header.ts`
 attaches no listener to a period button at all — clicks, context menus, hover
 previews and drops all arrive through `findCell()`, whose selector is
-`CELL_SELECTOR = '.day, .week-num, .calendar-plus-period'`. Two rules follow:
+`CELL_SELECTOR = '.day, .week-num, .periodic-calendar-period'`. Two rules follow:
 
 - Do not add a per-button listener back. The view already handles the event, so
   a second one would open the note twice (a `<button>` fires `click` on Enter and
@@ -190,7 +190,7 @@ params?)` resolves it. Rules that are easy to break:
 
 Obsidian captures `getSettingDefinitions()` when the tab is **constructed**, so
 sources are registered in `onload()` before `addSettingTab`, and a source that
-registers later triggers `CalendarPlusSettingTab.refreshDefinitions()`, which
+registers later triggers `PeriodicCalendarSettingTab.refreshDefinitions()`, which
 feature-detects 1.13's `update()`.
 
 **`onSourcesChanged()` fires on both edges — registering *and* unregistering.**
@@ -275,7 +275,7 @@ something a user had turned on by hand.
 
 Verified in the app by stubbing `loadData`/`saveSettings` and calling the real
 `loadSettings()` three times: a null store came back with
-`['calendar-plus-word-count', 'calendar-plus-tags']` and one write; a store
+`['periodic-calendar-word-count', 'periodic-calendar-tags']` and one write; a store
 holding `{ disabledSources: [], showWeekNumbers: false }` came back with
 `disabledSources` still empty, `showWeekNumbers` still false and one write (the
 mark only); an already-marked store came back untouched with **zero** writes.
@@ -298,7 +298,7 @@ is whether the event is ever fired. Measured on a day with a note: `preview` gav
 exactly 1 `hover-link` carrying the note's path, `summary` and `none` gave 0, and
 only `none` left the cell with no `aria-label`.
 
-The accessible name is **not** part of this trade-off. `.calendar-plus-a11y-name`
+The accessible name is **not** part of this trade-off. `.periodic-calendar-a11y-name`
 carries the full text in all three modes, so a screen reader still hears
 `27 July 2026 · 2 tasks completed · 9 tasks open` even when the user asked for no
 tooltip. A visual preference must never cost a11y information.
@@ -385,7 +385,7 @@ that pass — not a reading of the code — before ticking anything new.
       `Cronos/Semanario/2026-W31.md`.
 - [x] Hover a day → Obsidian's native page preview — a `pointerover` fired
       exactly one `hover-link` carrying the daily note's path, and
-      `calendar-plus` is in `workspace.hoverLinkSources`.
+      `periodic-calendar` is in `workspace.hoverLinkSources`.
 - [x] Right-click a day → context menu — with `nativeMenus` off (macOS menus are
       native, so the DOM shows nothing otherwise) the menu came up headed by the
       period label, with open/delete entries plus the ones other plugins add
@@ -402,7 +402,7 @@ that pass — not a reading of the code — before ticking anything new.
       waited out; what the clock is not proven to do is fire, only what the tick
       does when it fires. `registerInterval(HEARTBEAT_MS)` is what schedules it.
 - [x] Dots for existing notes, word count, tags — 30 dots on the grid, carrying
-      `calendar-plus-notes-exist-note` and `calendar-plus-tags-tag`. **Re-running
+      `periodic-calendar-notes-exist-note` and `periodic-calendar-tags-tag`. **Re-running
       this on a fresh install now gives dots from `notes-exist` only**, because
       the other two ship disabled; enable them first or the count will look like
       a regression when it is the new default.
@@ -427,7 +427,7 @@ the ones most easily broken by a refactor:
   `revealDate()` right after it moved the calendar three months on. Calling it
   again with the view open, twice in a row, and twice concurrently from a closed
   state (the two calls got the *same* promise object) all left `leaves === 1` and
-  one `.calendar-plus-view` node.
+  one `.periodic-calendar-view` node.
 
 A second pass on **2026-08-09** drove the four UX changes above — button order and
 tab order, every source off leaving zero dots, an external source's toggle
@@ -470,7 +470,7 @@ into one pass at the end of a change, never one per tweak**:
 ```bash
 obs dev:errors                     # `obs` = wrapper with a default vault and a timeout
 obs dev:screenshot path=/tmp/cal.png
-obs eval code="app.plugins.plugins['calendar-plus'].api.version"
+obs eval code="app.plugins.plugins['periodic-calendar'].api.version"
 ```
 
 `eval` measured 0/3 on stealing focus and `dev:errors` 1/3, so prefer asking the
@@ -485,7 +485,7 @@ existing CSS snippets keep working. Verify in both light and dark themes.
 
 ### The touch-target floor needs two signals, and one of them is not emulated
 
-`--cp-touch-target` is declared on `.calendar-plus-view` (`0px`) and raised to
+`--cp-touch-target` is declared on `.periodic-calendar-view` (`0px`) and raised to
 44 px by **both** `@media (pointer: coarse)` and `body.is-mobile`. That is not
 belt-and-braces for its own sake: under `dev:mobile on`,
 `matchMedia('(pointer: coarse)').matches` is **`false`**, so the rules that used to

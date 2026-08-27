@@ -39,7 +39,7 @@ export default {
 	// --- Notices and the confirmation modal ----------------------------------
 	noticeNotPeriodicNote: 'The active note is not a periodic note.',
 	noticeNotConfigured:
-		'No note is configured for this period. Set it up in Periodic Notes, or in Calendar Plus settings for semester notes.',
+		'No note is configured for this period. Set it up in Periodic Notes, or in Periodic Calendar settings for semester notes.',
 	noticeTemplateUnreadable: 'Could not read the template {path}',
 	noticeCreateFailed: 'Could not create the note.',
 	modalNewNoteTitle: 'New note',
@@ -76,7 +76,7 @@ export default {
 	settingWordsPerDotName: 'Words per dot',
 	settingWordsPerDotDesc: 'How many words each dot of the word count source stands for.',
 	settingsSourcesEmpty:
-		'No source is registered yet. Sources come from Calendar Plus itself and from other plugins.',
+		'No source is registered yet. Sources come from Periodic Calendar itself and from other plugins.',
 	settingsSourceDegraded:
 		'Stopped after repeated errors. It is retried when it reports new data.',
 	settingFooterName: 'Show the summary footer',
@@ -87,7 +87,7 @@ export default {
 		'Cards past this many are left out, so the footer cannot take over a narrow sidebar.',
 	settingSemesterEnabledName: 'Enable semester notes',
 	settingSemesterEnabledDesc:
-		'Periodic Notes has no semester tier, so Calendar Plus resolves it on its own: semester 1 covers the first six months of the year, semester 2 the rest.',
+		'Periodic Notes has no semester tier, so Periodic Calendar resolves it on its own: semester 1 covers the first six months of the year, semester 2 the rest.',
 	settingSemesterFolderName: 'Semester note folder',
 	settingSemesterFolderPlaceholder: 'Folder for semester notes',
 	settingSemesterFormatName: 'Semester note format',

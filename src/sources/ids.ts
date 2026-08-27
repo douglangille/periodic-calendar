@@ -7,6 +7,6 @@
  * here, so `settings.ts` can depend on this without dragging in the sources.
  */
 
-export const NOTES_EXIST_SOURCE_ID = 'calendar-plus-notes-exist';
-export const WORD_COUNT_SOURCE_ID = 'calendar-plus-word-count';
-export const TAGS_SOURCE_ID = 'calendar-plus-tags';
+export const NOTES_EXIST_SOURCE_ID = 'periodic-calendar-notes-exist';
+export const WORD_COUNT_SOURCE_ID = 'periodic-calendar-word-count';
+export const TAGS_SOURCE_ID = 'periodic-calendar-tags';

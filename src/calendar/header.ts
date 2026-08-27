@@ -86,7 +86,7 @@ export function renderHeader(container: HTMLElement, spec: HeaderSpec): Calendar
 
 	if (!spec.showPeriodShortcuts) return [];
 
-	const shortcuts = container.createDiv({ cls: 'calendar-plus-periods' });
+	const shortcuts = container.createDiv({ cls: 'periodic-calendar-periods' });
 	const cells: CalendarCell[] = [];
 	for (const granularity of HEADER_GRANULARITIES) {
 		if (!spec.isAvailable(granularity)) continue;
@@ -95,7 +95,7 @@ export function renderHeader(container: HTMLElement, spec: HeaderSpec): Calendar
 			date: spec.displayedMonth,
 			granularity,
 			tag: 'button',
-			cls: 'calendar-plus-period',
+			cls: 'periodic-calendar-period',
 			text: shortcutText(spec.displayedMonth, granularity),
 			label: t('headerOpenPeriod', { period: periodLabel(spec.displayedMonth, granularity) }),
 			valueDisplay: spec.valueDisplay,

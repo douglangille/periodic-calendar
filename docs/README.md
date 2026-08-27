@@ -1,4 +1,4 @@
-# Calendar Plus documentation
+# Periodic Calendar documentation
 
 - **[User guide](user-guide.md)** — the view, opening and creating notes, the six
   periods, semesters, sources, the footer, hovering, keyboard, commands, language

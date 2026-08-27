@@ -7,7 +7,7 @@ import {
 	resolveVisualDefaults,
 } from './settings.ts';
 
-const DEFAULTS = ['calendar-plus-word-count', 'calendar-plus-tags'] as const;
+const DEFAULTS = ['periodic-calendar-word-count', 'periodic-calendar-tags'] as const;
 
 const VISUAL = { valueDisplay: 'intensity', hoverMode: 'summary' };
 
@@ -25,15 +25,15 @@ describe('resolveDisabledSources', () => {
 	});
 
 	it('keeps the stored list of an existing user untouched', () => {
-		const stored = ['calendar-plus-notes-exist'];
+		const stored = ['periodic-calendar-notes-exist'];
 		const result = resolveDisabledSources(false, true, stored, DEFAULTS);
 		assert.deepEqual(result.disabledSources, stored);
 		assert.equal(result.markApplied, true);
 	});
 
 	it('leaves everything alone once the mark is there', () => {
-		const result = resolveDisabledSources(true, true, ['calendar-plus-tags'], DEFAULTS);
-		assert.deepEqual(result.disabledSources, ['calendar-plus-tags']);
+		const result = resolveDisabledSources(true, true, ['periodic-calendar-tags'], DEFAULTS);
+		assert.deepEqual(result.disabledSources, ['periodic-calendar-tags']);
 		assert.equal(result.markApplied, false);
 	});
 
@@ -45,10 +45,10 @@ describe('resolveDisabledSources', () => {
 	});
 
 	it('copies the stored list instead of aliasing it', () => {
-		const stored = ['calendar-plus-tags'];
+		const stored = ['periodic-calendar-tags'];
 		const result = resolveDisabledSources(true, true, stored, DEFAULTS);
 		result.disabledSources.push('other');
-		assert.deepEqual(stored, ['calendar-plus-tags']);
+		assert.deepEqual(stored, ['periodic-calendar-tags']);
 	});
 
 	it('survives a stored value that is not a list', () => {
@@ -57,8 +57,8 @@ describe('resolveDisabledSources', () => {
 	});
 
 	it('drops entries a hand-edited file left behind that are not source ids', () => {
-		const result = resolveDisabledSources(true, true, ['calendar-plus-tags', 7, null], DEFAULTS);
-		assert.deepEqual(result.disabledSources, ['calendar-plus-tags']);
+		const result = resolveDisabledSources(true, true, ['periodic-calendar-tags', 7, null], DEFAULTS);
+		assert.deepEqual(result.disabledSources, ['periodic-calendar-tags']);
 	});
 });
 

@@ -1,6 +1,6 @@
-# The Calendar Plus API
+# The Periodic Calendar API
 
-Calendar Plus is a calendar other plugins can write on. Instead of the calendar
+Periodic Calendar is a calendar other plugins can write on. Instead of the calendar
 hardcoding every feature someone might want on a day cell, it asks the plugins
 that are installed. A plugin that registers a **source** gets to put dots, a
 number, CSS classes and a tooltip on every cell the user can see, add items to a
@@ -34,19 +34,19 @@ unclear, read them.
 ## Getting the API
 
 Copy [`src/api/types.ts`](../src/api/types.ts) into your own plugin — say as
-`src/calendar-plus-api.ts` — rather than importing from this repository. It
+`src/periodic-calendar-api.ts` — rather than importing from this repository. It
 imports nothing but `obsidian` types, so it drops in anywhere, and your plugin
-keeps building on a machine where Calendar Plus does not exist.
+keeps building on a machine where Periodic Calendar does not exist.
 
 Then reach the API through one function that is allowed to return `null`:
 
 ```ts
 import type { App } from 'obsidian';
-import type { CalendarPlusApi } from './calendar-plus-api';
+import type { PeriodicCalendarApi } from './periodic-calendar-api';
 
-export function getCalendarPlusApi(app: App): CalendarPlusApi | null {
+export function getPeriodicCalendarApi(app: App): PeriodicCalendarApi | null {
 	const plugins = (app as App & { plugins?: { plugins?: Record<string, unknown> } }).plugins;
-	const plugin = plugins?.plugins?.['calendar-plus'] as { api?: CalendarPlusApi } | undefined;
+	const plugin = plugins?.plugins?.['periodic-calendar'] as { api?: PeriodicCalendarApi } | undefined;
 	return plugin?.api?.version === 1 ? plugin.api : null;
 }
 ```
@@ -57,10 +57,10 @@ Two things that are not optional:
   consumer that checked would switch its integration off, and one that did not
   would crash inside somebody else's plugin.
 - **Treat `null` as a supported state**, not an error. Most users will not have
-  Calendar Plus installed. Degrade visibly if you like (a notice when the user
+  Periodic Calendar installed. Degrade visibly if you like (a notice when the user
   asks for the feature), never silently break.
 
-**Calendar Plus may be enabled after your plugin.** `app.plugins` extends
+**Periodic Calendar may be enabled after your plugin.** `app.plugins` extends
 `Events` and fires `changed` on every enable, disable and uninstall, so a lookup
 that runs once in `onload` will miss it. Re-check in three places and make the
 sync idempotent:
@@ -71,14 +71,14 @@ override async onload(): Promise<void> {
 	// `app.plugins` is not in the public typings, but it does extend `Events`.
 	const plugins = (this.app as unknown as { plugins: Events }).plugins;
 	this.registerEvent(plugins.on('changed', () => this.syncCalendar()));
-	this.syncCalendar(); // catches a Calendar Plus that is already loaded
+	this.syncCalendar(); // catches a Periodic Calendar that is already loaded
 }
 ```
 
 ## Registering a source
 
 ```ts
-const api = getCalendarPlusApi(this.app);
+const api = getPeriodicCalendarApi(this.app);
 if (api) {
 	this.register(
 		api.registerSource({
@@ -98,7 +98,7 @@ if (api) {
   CSS class you contribute and it is the key the user's on/off choice is stored
   under, so changing it later resets that choice.
 - **`name`** — human-readable, sentence case. It labels your toggle in the
-  Calendar Plus settings, so it should read as *your* feature: the user sees it
+  Periodic Calendar settings, so it should read as *your* feature: the user sees it
   next to "Existing notes" and "Word count".
 - **`registerSource` returns its own unregister function.** Pass it to
   `this.register()` and disabling your plugin leaves nothing behind. Registering
@@ -210,8 +210,8 @@ that sanitizes to nothing is dropped.
 So a source with `id: 'my-plugin'` contributing `className: 'busy'` styles it as:
 
 ```css
-.calendar-plus-view .dot.my-plugin-busy {
-	--calendar-plus-dot-color: var(--color-orange);
+.periodic-calendar-view .dot.my-plugin-busy {
+	--periodic-calendar-dot-color: var(--color-orange);
 }
 ```
 
@@ -371,7 +371,7 @@ drop was accepted by some source.
 
 ## Versioning
 
-`CalendarPlusApi.version` is `1`. Adding an optional field is not a breaking
+`PeriodicCalendarApi.version` is `1`. Adding an optional field is not a breaking
 change; renaming or removing anything is, and requires a version bump with the
 previous shape kept working for at least one minor release.
 

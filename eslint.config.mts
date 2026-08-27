@@ -39,11 +39,11 @@ export default defineConfig(
 		rules: {
 			'obsidianmd/ui/sentence-case': [
 				'warn',
-				{ brands: ['Obsidian', 'Periodic Notes', 'Calendar Plus'], enforceCamelCaseLower: true },
+				{ brands: ['Obsidian', 'Periodic Notes', 'Periodic Calendar'], enforceCamelCaseLower: true },
 			],
 			'obsidianmd/ui/sentence-case-locale-module': [
 				'warn',
-				{ brands: ['Obsidian', 'Periodic Notes', 'Calendar Plus'] },
+				{ brands: ['Obsidian', 'Periodic Notes', 'Periodic Calendar'] },
 			],
 		},
 	},

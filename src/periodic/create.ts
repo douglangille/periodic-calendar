@@ -190,7 +190,7 @@ export async function openPeriodicNote(
 			const file = await createPeriodicNote(app, date, config);
 			await app.workspace.getLeaf(options.newLeaf).openFile(file);
 		} catch (err) {
-			console.error('Calendar Plus could not create the note', err);
+			console.error('Periodic Calendar could not create the note', err);
 			new Notice(t('noticeCreateFailed'));
 		}
 	};

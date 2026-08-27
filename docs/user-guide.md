@@ -1,6 +1,6 @@
 # User guide
 
-Calendar Plus puts a month calendar in your sidebar and wires it to the periodic
+Periodic Calendar puts a month calendar in your sidebar and wires it to the periodic
 notes you already keep. Click a day to open its note. Click a week number for the
 weekly note. Use the row above the grid to reach the month, quarter, semester and
 year.
@@ -67,16 +67,16 @@ also tells you where you are.
 | Right-click | Context menu: open, delete, plus whatever other plugins add |
 | Drag something onto a cell | Whatever the source that accepts it does |
 
-When a note does not exist yet, Calendar Plus asks before creating it. That
+When a note does not exist yet, Periodic Calendar asks before creating it. That
 confirmation is the **Confirm before creating a note** setting; turn it off and a
 click on an empty day creates the note straight away.
 
 New notes use the template configured for that period — the one in core Daily
-notes or Periodic Notes, and for semesters the one in Calendar Plus settings.
+notes or Periodic Notes, and for semesters the one in Periodic Calendar settings.
 
 ## The six periods
 
-Nothing about your file naming is duplicated in Calendar Plus. Each period is
+Nothing about your file naming is duplicated in Periodic Calendar. Each period is
 resolved from the vault's own configuration:
 
 | Period | Configured in | Default format | Example |
@@ -85,7 +85,7 @@ resolved from the vault's own configuration:
 | Week | Periodic Notes `weekly` | `gggg-[W]ww` | `2026-W32` |
 | Month | Periodic Notes `monthly` | `YYYY-MM` | `2026-08` |
 | Quarter | Periodic Notes `quarterly` | `YYYY-[Q]Q` | `2026-Q3` |
-| Semester | **Calendar Plus settings** | `YYYY-[S]{semester}` | `2026-S2` |
+| Semester | **Periodic Calendar settings** | `YYYY-[S]{semester}` | `2026-S2` |
 | Year | Periodic Notes `yearly` | `YYYY` | `2026` |
 
 Two details worth knowing:
@@ -103,7 +103,7 @@ coarser than a day comes from the Periodic Notes plugin — except semesters.
 
 ## Semester notes
 
-Periodic Notes has no semester tier, so this one is a Calendar Plus convention
+Periodic Notes has no semester tier, so this one is a Periodic Calendar convention
 and is **off by default**. Turn it on in settings and point it at a folder.
 
 - **Semester 1** is January to June; **semester 2** is July to December.
@@ -165,7 +165,7 @@ Two rules about defaults, so nothing surprises you:
 - A source arriving **from another plugin is on** by default. Installing a plugin
   should show something.
 - Those defaults are only ever applied to a vault that has **no stored settings**
-  for Calendar Plus. An existing configuration is left exactly as it is, and a
+  for Periodic Calendar. An existing configuration is left exactly as it is, and a
   mark is written so no later version can turn off something you switched on by
   hand.
 
@@ -271,7 +271,7 @@ keep working here.
 The `--color-*` indirection is the intended override point:
 
 ```css
-.calendar-plus-view {
+.periodic-calendar-view {
 	--color-background-weekend: var(--background-secondary);
 	--color-dot: var(--color-green);
 	--color-background-today: var(--color-orange);
@@ -294,8 +294,8 @@ apart:
 To restyle one source's dots, use the namespaced class:
 
 ```css
-.calendar-plus-view .dot.calendar-plus-word-count-word {
-	--calendar-plus-dot-color: var(--color-blue);
+.periodic-calendar-view .dot.periodic-calendar-word-count-word {
+	--periodic-calendar-dot-color: var(--color-blue);
 }
 ```
 

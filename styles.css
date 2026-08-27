@@ -1,5 +1,5 @@
 /*
- * Calendar Plus styles.
+ * Periodic Calendar styles.
  *
  * Rule for this file: only Obsidian CSS variables, never literal colors, so the
  * plugin adapts to any theme in both light and dark mode.
@@ -11,7 +11,7 @@
  * original's too, and is the intended override point.
  */
 
-.calendar-plus-view {
+.periodic-calendar-view {
 	--color-background-heading: transparent;
 	--color-background-day: transparent;
 	--color-background-weeknum: transparent;
@@ -41,13 +41,13 @@
 	padding: 0 var(--size-4-2);
 }
 
-.calendar-plus-view.is-mobile {
+.periodic-calendar-view.is-mobile {
 	padding: 0;
 }
 
 /* ------------------------------------------------------------------ header */
 
-.calendar-plus-view .nav {
+.periodic-calendar-view .nav {
 	display: flex;
 	align-items: center;
 	/* Without this the row refuses to shrink below its content and pushes the
@@ -57,7 +57,7 @@
 	margin: var(--size-4-2) 0 var(--size-4-3);
 }
 
-.calendar-plus-view .title {
+.periodic-calendar-view .title {
 	/* The title is the only part that may give way; the controls must stay
 	   reachable, so they never shrink and the month name truncates instead. */
 	min-width: 0;
@@ -70,25 +70,25 @@
 	white-space: nowrap;
 }
 
-.calendar-plus-view .title .month {
+.periodic-calendar-view .title .month {
 	font-weight: var(--font-semibold);
 	text-transform: capitalize;
 }
 
-.calendar-plus-view .title .year {
+.periodic-calendar-view .title .year {
 	color: var(--interactive-accent);
 }
 
-.calendar-plus-view .right-nav {
+.periodic-calendar-view .right-nav {
 	display: flex;
 	flex: 0 0 auto;
 	align-items: center;
 	margin-left: auto;
 }
 
-.calendar-plus-view .arrow,
-.calendar-plus-view .reset-button,
-.calendar-plus-view .calendar-plus-period {
+.periodic-calendar-view .arrow,
+.periodic-calendar-view .reset-button,
+.periodic-calendar-view .periodic-calendar-period {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -98,19 +98,19 @@
 	cursor: pointer;
 }
 
-.calendar-plus-view .arrow {
+.periodic-calendar-view .arrow {
 	width: max(var(--size-4-6), var(--cp-touch-target, 0px));
 	height: max(var(--size-4-6), var(--cp-touch-target, 0px));
 	padding: 0;
 	color: var(--color-arrow);
 }
 
-.calendar-plus-view .arrow .svg-icon {
+.periodic-calendar-view .arrow .svg-icon {
 	width: var(--icon-s);
 	height: var(--icon-s);
 }
 
-.calendar-plus-view .reset-button {
+.periodic-calendar-view .reset-button {
 	margin: 0 var(--size-2-1);
 	padding: 0 var(--size-2-2);
 	color: var(--color-button);
@@ -120,16 +120,16 @@
 	text-transform: uppercase;
 }
 
-.calendar-plus-view .arrow:hover,
-.calendar-plus-view .reset-button:hover,
-.calendar-plus-view .calendar-plus-period:hover {
+.periodic-calendar-view .arrow:hover,
+.periodic-calendar-view .reset-button:hover,
+.periodic-calendar-view .periodic-calendar-period:hover {
 	background-color: var(--background-modifier-hover);
 	color: var(--text-normal);
 }
 
 /* Period shortcuts: yearly, semester, quarterly and monthly notes, coarsest
  * first — `2026 · S2 · Q3 · Aug` — which is also their tab order. */
-.calendar-plus-view .calendar-plus-periods {
+.periodic-calendar-view .periodic-calendar-periods {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--size-2-1);
@@ -140,7 +140,7 @@
  * A period button is a calendar cell like any other — sources decorate it with
  * dots and a value — so its label and its dot row stack vertically.
  */
-.calendar-plus-view .calendar-plus-period {
+.periodic-calendar-view .periodic-calendar-period {
 	flex: 1 1 auto;
 	flex-direction: column;
 	gap: 1px;
@@ -151,25 +151,25 @@
 	text-transform: capitalize;
 }
 
-.calendar-plus-view .calendar-plus-period.has-note {
+.periodic-calendar-view .periodic-calendar-period.has-note {
 	color: var(--text-normal);
 	background-color: var(--background-modifier-border);
 }
 
 /* The ring, and the colours it needs, are with the day cell's `.active` rule. */
-.calendar-plus-view .calendar-plus-period.active {
+.periodic-calendar-view .periodic-calendar-period.active {
 	color: var(--text-normal);
 }
 
 /* -------------------------------------------------------------------- grid */
 
-.calendar-plus-view .calendar {
+.periodic-calendar-view .calendar {
 	width: 100%;
 	border-collapse: collapse;
 	table-layout: fixed;
 }
 
-.calendar-plus-view .calendar th {
+.periodic-calendar-view .calendar th {
 	padding: var(--size-2-1);
 	background-color: var(--color-background-heading);
 	color: var(--color-text-heading);
@@ -181,7 +181,7 @@
 	border: none;
 }
 
-.calendar-plus-view .calendar td {
+.periodic-calendar-view .calendar td {
 	padding: 0;
 	border: none;
 	vertical-align: top;
@@ -194,31 +194,31 @@
  * than a column gets below roughly 270 px of panel; the result was neighbouring
  * headers running into each other and the view overflowing sideways.
  */
-.calendar-plus-view .calendar th.weekday > span {
+.periodic-calendar-view .calendar th.weekday > span {
 	max-width: 100%;
 	/* Last-resort guard: whatever the width and whatever the locale's
 	   abbreviation, a header clips instead of bleeding into its neighbour. */
 	overflow: hidden;
 }
 
-.calendar-plus-view .calendar th.weekday .calendar-plus-weekday-full {
+.periodic-calendar-view .calendar th.weekday .periodic-calendar-weekday-full {
 	display: inline-block;
 }
 
-.calendar-plus-view .calendar th.weekday .calendar-plus-weekday-min {
+.periodic-calendar-view .calendar th.weekday .periodic-calendar-weekday-min {
 	display: none;
 }
 
-.calendar-plus-view .calendar col.weekend,
-.calendar-plus-view .calendar td.weekend {
+.periodic-calendar-view .calendar col.weekend,
+.periodic-calendar-view .calendar td.weekend {
 	background-color: var(--color-background-weekend);
 }
 
-.calendar-plus-view .calendar-plus-week-col {
+.periodic-calendar-view .periodic-calendar-week-col {
 	width: 2.2em;
 }
 
-.calendar-plus-view .calendar-plus-week-cell {
+.periodic-calendar-view .periodic-calendar-week-cell {
 	border-right: 1px solid var(--background-modifier-border);
 }
 
@@ -232,8 +232,8 @@
  * `--font-smallest`: at those sizes the grid was legible but noticeably meaner
  * than the plugin it replaces.
  */
-.calendar-plus-view .day,
-.calendar-plus-view .week-num {
+.periodic-calendar-view .day,
+.periodic-calendar-view .week-num {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -249,20 +249,20 @@
 		color 100ms ease-in;
 }
 
-.calendar-plus-view .day {
+.periodic-calendar-view .day {
 	background-color: var(--color-background-day);
 	color: var(--color-text-day);
 	font-size: var(--font-ui-small);
 }
 
-.calendar-plus-view .week-num {
+.periodic-calendar-view .week-num {
 	background-color: var(--color-background-weeknum);
 	color: var(--color-text-weeknum);
 	font-size: var(--font-smaller);
 }
 
-.calendar-plus-view .day:hover,
-.calendar-plus-view .week-num:hover {
+.periodic-calendar-view .day:hover,
+.periodic-calendar-view .week-num:hover {
 	background-color: var(--background-modifier-hover);
 }
 
@@ -277,7 +277,7 @@
  * alike — and it never competes with the ring below, which marks something
  * else entirely.
  */
-.calendar-plus-view .day.today .calendar-plus-text {
+.periodic-calendar-view .day.today .periodic-calendar-text {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -291,7 +291,7 @@
 	line-height: 1;
 }
 
-.calendar-plus-view .day.adjacent-month {
+.periodic-calendar-view .day.adjacent-month {
 	opacity: 0.4;
 }
 
@@ -311,10 +311,10 @@
  * all five buckets and over an empty cell. Today keeps its accent pill inside,
  * so a day that is both shows both marks without either explaining the other.
  */
-.calendar-plus-view .day.active,
-.calendar-plus-view .day.active.today,
-.calendar-plus-view .week-num.active,
-.calendar-plus-view .calendar-plus-period.active {
+.periodic-calendar-view .day.active,
+.periodic-calendar-view .day.active.today,
+.periodic-calendar-view .week-num.active,
+.periodic-calendar-view .periodic-calendar-period.active {
 	box-shadow: inset 0 0 0 2px var(--color-active-ring);
 	font-weight: var(--font-semibold);
 }
@@ -322,22 +322,22 @@
 /* No `background-color` above on purpose: it would beat the intensity class on
    specificity and blank out the very shade the ring is drawn over. */
 
-.calendar-plus-view .day.active:hover,
-.calendar-plus-view .week-num.active:hover,
-.calendar-plus-view .calendar-plus-period.active:hover {
+.periodic-calendar-view .day.active:hover,
+.periodic-calendar-view .week-num.active:hover,
+.periodic-calendar-view .periodic-calendar-period.active:hover {
 	background-color: var(--background-modifier-hover);
 }
 
-.calendar-plus-view .week-num.is-unavailable {
+.periodic-calendar-view .week-num.is-unavailable {
 	cursor: default;
 	opacity: 0.5;
 }
 
-.calendar-plus-view .day:focus-visible,
-.calendar-plus-view .week-num:focus-visible,
-.calendar-plus-view .arrow:focus-visible,
-.calendar-plus-view .reset-button:focus-visible,
-.calendar-plus-view .calendar-plus-period:focus-visible {
+.periodic-calendar-view .day:focus-visible,
+.periodic-calendar-view .week-num:focus-visible,
+.periodic-calendar-view .arrow:focus-visible,
+.periodic-calendar-view .reset-button:focus-visible,
+.periodic-calendar-view .periodic-calendar-period:focus-visible {
 	outline: 2px solid var(--interactive-accent);
 	outline-offset: 1px;
 }
@@ -349,7 +349,7 @@
  * flow, so it cannot disturb the cell's layout, and never `display: none`,
  * which would hide it from screen readers too.
  */
-.calendar-plus-view .calendar-plus-a11y-name {
+.periodic-calendar-view .periodic-calendar-a11y-name {
 	position: absolute;
 	width: 1px;
 	height: 1px;
@@ -379,7 +379,7 @@
  * horizontal scroller, which in a panel that already scrolls vertically would
  * hide them with no affordance. The card limit in settings bounds the lines.
  */
-.calendar-plus-view .calendar-plus-footer {
+.periodic-calendar-view .periodic-calendar-footer {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(3.75rem, 1fr));
 	gap: var(--size-2-1);
@@ -389,11 +389,11 @@
 }
 
 /* A month nobody has written in must not leave a stripe of nothing behind. */
-.calendar-plus-view .calendar-plus-footer.is-empty {
+.periodic-calendar-view .periodic-calendar-footer.is-empty {
 	display: none;
 }
 
-.calendar-plus-view .calendar-plus-card {
+.periodic-calendar-view .periodic-calendar-card {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
@@ -409,25 +409,25 @@
 	text-align: left;
 }
 
-.calendar-plus-view .calendar-plus-card-figure {
+.periodic-calendar-view .periodic-calendar-card-figure {
 	display: flex;
 	align-items: center;
 	gap: var(--size-2-1);
 	max-width: 100%;
 }
 
-.calendar-plus-view .calendar-plus-card-icon {
+.periodic-calendar-view .periodic-calendar-card-icon {
 	display: inline-flex;
 	flex: 0 0 auto;
 	color: var(--text-faint);
 }
 
-.calendar-plus-view .calendar-plus-card-icon .svg-icon {
+.periodic-calendar-view .periodic-calendar-card-icon .svg-icon {
 	width: var(--icon-xs);
 	height: var(--icon-xs);
 }
 
-.calendar-plus-view .calendar-plus-card-value {
+.periodic-calendar-view .periodic-calendar-card-value {
 	overflow: hidden;
 	color: var(--text-normal);
 	font-size: var(--font-ui-smaller);
@@ -438,7 +438,7 @@
 	white-space: nowrap;
 }
 
-.calendar-plus-view .calendar-plus-card-label {
+.periodic-calendar-view .periodic-calendar-card-label {
 	overflow: hidden;
 	max-width: 100%;
 	color: var(--text-muted);
@@ -452,24 +452,24 @@
 /* Only a card with an `onClick` behaves like something you can press — and only
    those need a finger-sized target, which is also why only those get padding:
    a chip that does nothing is text, and text does not need a hit area. */
-.calendar-plus-view .calendar-plus-card.is-interactive {
+.periodic-calendar-view .periodic-calendar-card.is-interactive {
 	cursor: pointer;
 	min-height: var(--cp-touch-target, 0px);
 	justify-content: center;
 }
 
-.calendar-plus-view .calendar-plus-card.is-interactive:hover {
+.periodic-calendar-view .periodic-calendar-card.is-interactive:hover {
 	background-color: var(--background-modifier-hover);
 }
 
-.calendar-plus-view .calendar-plus-card.is-interactive:focus-visible {
+.periodic-calendar-view .periodic-calendar-card.is-interactive:focus-visible {
 	outline: 2px solid var(--interactive-accent);
 	outline-offset: 1px;
 }
 
 /* ------------------------------------------------------- source decorations */
 
-.calendar-plus-view .dot-container {
+.periodic-calendar-view .dot-container {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
@@ -479,21 +479,21 @@
 }
 
 /* 6 px, which is the original Calendar's dot size. */
-.calendar-plus-view .dot {
-	--calendar-plus-dot-color: var(--color-dot);
+.periodic-calendar-view .dot {
+	--periodic-calendar-dot-color: var(--color-dot);
 	display: inline-block;
 	width: 6px;
 	height: 6px;
 	border-radius: 50%;
 }
 
-.calendar-plus-view .dot.filled {
-	background-color: var(--calendar-plus-dot-color);
+.periodic-calendar-view .dot.filled {
+	background-color: var(--periodic-calendar-dot-color);
 }
 
-.calendar-plus-view .dot.hollow {
+.periodic-calendar-view .dot.hollow {
 	background-color: transparent;
-	border: 1px solid var(--calendar-plus-dot-color);
+	border: 1px solid var(--periodic-calendar-dot-color);
 }
 
 /* Dots in the active cell keep their own colours: the cell is no longer filled
@@ -506,8 +506,8 @@
  * them. Tag dots carry their color as a custom property set from TypeScript,
  * always an Obsidian variable and never a literal.
  */
-.calendar-plus-view .dot.calendar-plus-word-count-word {
-	--calendar-plus-dot-color: var(--text-faint);
+.periodic-calendar-view .dot.periodic-calendar-word-count-word {
+	--periodic-calendar-dot-color: var(--text-faint);
 }
 
 /*
@@ -515,9 +515,9 @@
  * buttons are cells too, so they show the same affordance as a day.
  */
 /* Dashed, so it cannot be mistaken for the solid ring of the active period. */
-.calendar-plus-view .day.is-drop-target,
-.calendar-plus-view .week-num.is-drop-target,
-.calendar-plus-view .calendar-plus-period.is-drop-target {
+.periodic-calendar-view .day.is-drop-target,
+.periodic-calendar-view .week-num.is-drop-target,
+.periodic-calendar-view .periodic-calendar-period.is-drop-target {
 	background-color: var(--background-modifier-hover);
 	outline: 2px dashed var(--interactive-accent);
 	outline-offset: -2px;
@@ -531,7 +531,7 @@
  * read as one four-digit figure. Smaller, lighter and tabular is what tells them
  * apart at a glance.
  */
-.calendar-plus-view .calendar-plus-value {
+.periodic-calendar-view .periodic-calendar-value {
 	color: var(--text-muted);
 	font-size: var(--font-smallest);
 	font-variant-numeric: tabular-nums;
@@ -549,23 +549,23 @@
  * is the thing that suffers. A heatmap whose busiest day is unreadable has
  * traded away the information it was drawing.
  */
-.calendar-plus-view .calendar-plus-intensity-1 {
+.periodic-calendar-view .periodic-calendar-intensity-1 {
 	background-color: color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
-.calendar-plus-view .calendar-plus-intensity-2 {
+.periodic-calendar-view .periodic-calendar-intensity-2 {
 	background-color: color-mix(in srgb, var(--color-accent) 24%, transparent);
 }
 
-.calendar-plus-view .calendar-plus-intensity-3 {
+.periodic-calendar-view .periodic-calendar-intensity-3 {
 	background-color: color-mix(in srgb, var(--color-accent) 37%, transparent);
 }
 
-.calendar-plus-view .calendar-plus-intensity-4 {
+.periodic-calendar-view .periodic-calendar-intensity-4 {
 	background-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
 }
 
-.calendar-plus-view .calendar-plus-intensity-5 {
+.periodic-calendar-view .periodic-calendar-intensity-5 {
 	background-color: color-mix(in srgb, var(--color-accent) 65%, transparent);
 }
 
@@ -585,23 +585,23 @@
  * of restating the whole rule inside a conditional block, and `0px` on desktop
  * makes every one of them a no-op there.
  */
-.calendar-plus-view {
+.periodic-calendar-view {
 	--cp-touch-target: 0px;
 }
 
 @media (pointer: coarse) {
-	.calendar-plus-view {
+	.periodic-calendar-view {
 		--cp-touch-target: 44px;
 	}
 }
 
-body.is-mobile .calendar-plus-view {
+body.is-mobile .periodic-calendar-view {
 	--cp-touch-target: 44px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.calendar-plus-view .day,
-	.calendar-plus-view .week-num {
+	.periodic-calendar-view .day,
+	.periodic-calendar-view .week-num {
 		transition: none;
 	}
 }
@@ -619,30 +619,30 @@ body.is-mobile .calendar-plus-view {
 	/* The month name keeps its own line rather than being truncated: at this
 	   width the controls and "September 2026" cannot share a row, and losing the
 	   month you are looking at is the worse trade. */
-	.calendar-plus-view .nav {
+	.periodic-calendar-view .nav {
 		flex-wrap: wrap;
 		row-gap: var(--size-2-1);
 	}
 
-	.calendar-plus-view .title {
+	.periodic-calendar-view .title {
 		flex: 1 1 100%;
 	}
 
-	.calendar-plus-view .calendar th.weekday .calendar-plus-weekday-full {
+	.periodic-calendar-view .calendar th.weekday .periodic-calendar-weekday-full {
 		display: none;
 	}
 
-	.calendar-plus-view .calendar th.weekday .calendar-plus-weekday-min {
+	.periodic-calendar-view .calendar th.weekday .periodic-calendar-weekday-min {
 		display: inline-block;
 	}
 
 	/* Horizontal padding is what a column can least afford here. */
-	.calendar-plus-view .calendar th {
+	.periodic-calendar-view .calendar th {
 		padding: var(--size-2-1) 0;
 		letter-spacing: 0;
 	}
 
-	.calendar-plus-view .calendar-plus-week-col {
+	.periodic-calendar-view .periodic-calendar-week-col {
 		width: 1.7em;
 	}
 }
@@ -654,11 +654,11 @@ body.is-mobile .calendar-plus-view {
  * and clipping `Mo` and `We`.
  */
 @container (max-width: 11rem) {
-	.calendar-plus-view .calendar-plus-week-col {
+	.periodic-calendar-view .periodic-calendar-week-col {
 		width: 1.4em;
 	}
 
-	.calendar-plus-view .calendar th {
+	.periodic-calendar-view .calendar th {
 		text-transform: none;
 	}
 }

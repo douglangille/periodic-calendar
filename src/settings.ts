@@ -26,7 +26,7 @@ export const DEFAULT_DISABLED_SOURCES: readonly string[] = [WORD_COUNT_SOURCE_ID
 /** Ceiling for the footer's card limit, so the control cannot ask for absurdity. */
 export const MAX_SUMMARY_CARDS = 12;
 
-export interface CalendarPlusSettings {
+export interface PeriodicCalendarSettings {
 	/** `locale` keeps whatever the active moment locale says. */
 	weekStart: WeekStart;
 	/** A moment locale code, or `system-default`. */
@@ -71,7 +71,7 @@ export interface CalendarPlusSettings {
 	semesterTemplate: string;
 }
 
-export const DEFAULT_SETTINGS: CalendarPlusSettings = {
+export const DEFAULT_SETTINGS: PeriodicCalendarSettings = {
 	weekStart: 'locale',
 	localeOverride: 'system-default',
 	showWeekNumbers: true,
@@ -105,7 +105,7 @@ export interface SourceToggle {
 
 /** What the settings tab needs from the plugin, without importing it. */
 export interface SettingsHost extends Plugin {
-	settings: CalendarPlusSettings;
+	settings: PeriodicCalendarSettings;
 	saveSettings(): Promise<void>;
 	onSettingsChanged(): void;
 	/** Sources currently registered through the public API. */
@@ -124,7 +124,7 @@ interface DeclarativeSettingTab {
 }
 
 /** Whether a source is allowed to contribute. Unknown ids are on by default. */
-export function isSourceEnabled(settings: CalendarPlusSettings, sourceId: string): boolean {
+export function isSourceEnabled(settings: PeriodicCalendarSettings, sourceId: string): boolean {
 	return !settings.disabledSources.includes(sourceId);
 }
 
@@ -139,7 +139,7 @@ function sourceDefault(sourceId: string): boolean {
 
 /** Records a per-source toggle. Returns true when it actually changed. */
 export function setSourceEnabled(
-	settings: CalendarPlusSettings,
+	settings: PeriodicCalendarSettings,
 	sourceId: string,
 	enabled: boolean
 ): boolean {
@@ -199,7 +199,7 @@ function hoverModeOptions(): Record<string, string> {
 	};
 }
 
-export class CalendarPlusSettingTab extends PluginSettingTab {
+export class PeriodicCalendarSettingTab extends PluginSettingTab {
 	constructor(
 		app: App,
 		private readonly host: SettingsHost

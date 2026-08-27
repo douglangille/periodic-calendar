@@ -38,7 +38,7 @@ const es: Record<keyof typeof en, string> = {
 	// --- Avisos y el modal de confirmación -----------------------------------
 	noticeNotPeriodicNote: 'La nota activa no es una nota periódica.',
 	noticeNotConfigured:
-		'Este periodo no tiene ninguna nota configurada. Configúralo en Periodic Notes, o en los ajustes de Calendar Plus para las notas semestrales.',
+		'Este periodo no tiene ninguna nota configurada. Configúralo en Periodic Notes, o en los ajustes de Periodic Calendar para las notas semestrales.',
 	noticeTemplateUnreadable: 'No se pudo leer la plantilla {path}',
 	noticeCreateFailed: 'No se pudo crear la nota.',
 	modalNewNoteTitle: 'Nota nueva',
@@ -76,7 +76,7 @@ const es: Record<keyof typeof en, string> = {
 	settingWordsPerDotDesc:
 		'Cuántas palabras representa cada punto de la fuente de recuento de palabras.',
 	settingsSourcesEmpty:
-		'Todavía no hay ninguna fuente registrada. Las fuentes vienen del propio Calendar Plus y de otros plugins.',
+		'Todavía no hay ninguna fuente registrada. Las fuentes vienen del propio Periodic Calendar y de otros plugins.',
 	settingsSourceDegraded:
 		'Detenida tras varios errores seguidos. Se reintenta cuando informe de datos nuevos.',
 	settingFooterName: 'Mostrar el pie de resumen',
@@ -87,7 +87,7 @@ const es: Record<keyof typeof en, string> = {
 		'Las tarjetas que pasen de esta cantidad no se muestran, para que el pie no se coma una barra lateral estrecha.',
 	settingSemesterEnabledName: 'Activar las notas semestrales',
 	settingSemesterEnabledDesc:
-		'Periodic Notes no tiene nivel semestral, así que Calendar Plus lo resuelve por su cuenta: el semestre 1 abarca los primeros seis meses del año, y el 2 el resto.',
+		'Periodic Notes no tiene nivel semestral, así que Periodic Calendar lo resuelve por su cuenta: el semestre 1 abarca los primeros seis meses del año, y el 2 el resto.',
 	settingSemesterFolderName: 'Carpeta de las notas semestrales',
 	settingSemesterFolderPlaceholder: 'Carpeta para las notas semestrales',
 	settingSemesterFormatName: 'Formato de las notas semestrales',

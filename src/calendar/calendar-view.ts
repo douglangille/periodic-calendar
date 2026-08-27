@@ -21,7 +21,7 @@ import {
 	startOfPeriod,
 	type Moment,
 } from '../periodic/resolve';
-import type { CalendarPlusSettings } from '../settings';
+import type { PeriodicCalendarSettings } from '../settings';
 import type { CalendarCell } from './day-cell';
 import { renderFooter } from './footer';
 import { renderHeader } from './header';
@@ -34,7 +34,7 @@ import {
 	type MonthGrid,
 } from './month-grid';
 
-export const CALENDAR_VIEW_TYPE = 'calendar-plus';
+export const CALENDAR_VIEW_TYPE = 'periodic-calendar';
 
 /** How often "today" is re-checked so the highlight survives midnight. */
 const HEARTBEAT_MS = 60_000;
@@ -47,14 +47,14 @@ const HEARTBEAT_MS = 60_000;
  * hovering and dropping on them has to work exactly as it does on a day. Leaving
  * them out is what used to make them look like cells and refuse drops.
  */
-const CELL_SELECTOR = '.day, .week-num, .calendar-plus-period';
+const CELL_SELECTOR = '.day, .week-num, .periodic-calendar-period';
 
 /**
  * What the view needs from the plugin. Declared as an interface so the view
  * never imports `main.ts`, and so tests can drive it with a stub.
  */
 export interface CalendarViewHost {
-	settings: CalendarPlusSettings;
+	settings: PeriodicCalendarSettings;
 	configs: PeriodicConfigStore;
 	/** Re-reads the vault's periodic note configuration. True when it changed. */
 	refreshConfigs(): Promise<boolean>;
@@ -127,13 +127,13 @@ export class CalendarView extends ItemView implements HoverParent {
 	}
 
 	protected override async onOpen(): Promise<void> {
-		const root = this.contentEl.createDiv({ cls: 'container calendar-plus-view' });
+		const root = this.contentEl.createDiv({ cls: 'container periodic-calendar-view' });
 		root.toggleClass('is-mobile', Platform.isMobile);
-		this.headerEl = root.createDiv({ cls: 'calendar-plus-header' });
-		this.gridEl = root.createDiv({ cls: 'calendar-plus-grid' });
+		this.headerEl = root.createDiv({ cls: 'periodic-calendar-header' });
+		this.gridEl = root.createDiv({ cls: 'periodic-calendar-grid' });
 		// Created once and emptied on every repaint, like the header and the grid,
 		// so the strip can never end up duplicated below the calendar.
-		this.footerEl = root.createDiv({ cls: 'calendar-plus-footer is-empty' });
+		this.footerEl = root.createDiv({ cls: 'periodic-calendar-footer is-empty' });
 
 		// One delegated listener per event type on a container that outlives every
 		// repaint, so rebuilding the grid can never leak handlers.
@@ -457,7 +457,7 @@ export class CalendarView extends ItemView implements HoverParent {
 		// Sections are declared before triggering `file-menu` so our own entries
 		// sort above the ones other plugins and core contribute.
 		menu.addItem((item) =>
-			item.setTitle(periodLabel(date, granularity)).setIsLabel(true).setSection('calendar-plus')
+			item.setTitle(periodLabel(date, granularity)).setIsLabel(true).setSection('periodic-calendar')
 		);
 
 		if (file) {
@@ -484,7 +484,7 @@ export class CalendarView extends ItemView implements HoverParent {
 			);
 			// Lets other plugins contribute their usual file actions, the same way
 			// the original Calendar plugin did.
-			this.app.workspace.trigger('file-menu', menu, file, 'calendar-plus-context-menu');
+			this.app.workspace.trigger('file-menu', menu, file, 'periodic-calendar-context-menu');
 		} else if (config.enabled) {
 			menu.addItem((item) =>
 				item
@@ -499,7 +499,7 @@ export class CalendarView extends ItemView implements HoverParent {
 			);
 		} else {
 			menu.addItem((item) =>
-				item.setTitle(t('menuNotConfigured')).setIsLabel(true).setSection('calendar-plus')
+				item.setTitle(t('menuNotConfigured')).setIsLabel(true).setSection('periodic-calendar')
 			);
 		}
 

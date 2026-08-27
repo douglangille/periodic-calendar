@@ -3,8 +3,8 @@ import { sourceClassName } from '../domain/class-names';
 import type { CalendarCell } from '../calendar/day-cell';
 import type { Moment } from '../periodic/resolve';
 import type {
-	CalendarPlusApi,
-	CalendarPlusEvents,
+	PeriodicCalendarApi,
+	PeriodicCalendarEvents,
 	CalendarSource,
 	CellMetadata,
 	Dot,
@@ -127,7 +127,7 @@ function toCards(raw: SummaryCard[] | null | undefined): SummaryCard[] {
 }
 
 /**
- * The source registry behind `CalendarPlusApi`.
+ * The source registry behind `PeriodicCalendarApi`.
  *
  * Three things are worth knowing about how it behaves:
  *
@@ -145,12 +145,12 @@ function toCards(raw: SummaryCard[] | null | undefined): SummaryCard[] {
  *   largest is taken **per granularity**: a month button holding the sum of its
  *   days must not flatten every day cell to the palest bucket.
  */
-export class CalendarApiRegistry implements CalendarPlusApi {
+export class CalendarApiRegistry implements PeriodicCalendarApi {
 	readonly version = 1 as const;
 
 	private readonly host: CalendarApiHost;
 	private readonly entries = new Map<string, SourceEntry>();
-	private readonly listeners: { [K in keyof CalendarPlusEvents]: Set<CalendarPlusEvents[K]> } = {
+	private readonly listeners: { [K in keyof PeriodicCalendarEvents]: Set<PeriodicCalendarEvents[K]> } = {
 		'cell-click': new Set(),
 		'month-change': new Set(),
 		'date-drop': new Set(),
@@ -171,7 +171,7 @@ export class CalendarApiRegistry implements CalendarPlusApi {
 	// ------------------------------------------------------------ public API
 
 	registerSource(source: CalendarSource): () => void {
-		if (!source.id) throw new Error('Calendar Plus: a source needs a non-empty id.');
+		if (!source.id) throw new Error('Periodic Calendar: a source needs a non-empty id.');
 		const entry: SourceEntry = { source, failures: 0, degraded: false };
 		this.entries.set(source.id, entry);
 		this.host.onSourcesChanged();
@@ -226,8 +226,8 @@ export class CalendarApiRegistry implements CalendarPlusApi {
 		return surface ? surface.getDisplayedMonth() : window.moment().startOf('month');
 	}
 
-	on<K extends keyof CalendarPlusEvents>(event: K, callback: CalendarPlusEvents[K]): () => void {
-		const set: Set<CalendarPlusEvents[K]> = this.listeners[event];
+	on<K extends keyof PeriodicCalendarEvents>(event: K, callback: PeriodicCalendarEvents[K]): () => void {
+		const set: Set<PeriodicCalendarEvents[K]> = this.listeners[event];
 		set.add(callback);
 		return () => {
 			set.delete(callback);
@@ -406,16 +406,16 @@ export class CalendarApiRegistry implements CalendarPlusApi {
 		});
 	}
 
-	private dispatch<K extends keyof CalendarPlusEvents>(
+	private dispatch<K extends keyof PeriodicCalendarEvents>(
 		event: K,
-		invoke: (callback: CalendarPlusEvents[K]) => void
+		invoke: (callback: PeriodicCalendarEvents[K]) => void
 	): void {
 		// A copy, so a listener that unsubscribes itself cannot break the loop.
 		for (const callback of [...this.listeners[event]]) {
 			try {
 				invoke(callback);
 			} catch (error) {
-				console.error(`Calendar Plus: a "${event}" listener threw`, error);
+				console.error(`Periodic Calendar: a "${event}" listener threw`, error);
 			}
 		}
 	}
@@ -534,11 +534,11 @@ export class CalendarApiRegistry implements CalendarPlusApi {
 
 	private recordFailure(entry: SourceEntry, error: unknown): void {
 		entry.failures += 1;
-		console.error(`Calendar Plus: source "${entry.source.id}" threw from getMetadata`, error);
+		console.error(`Periodic Calendar: source "${entry.source.id}" threw from getMetadata`, error);
 		if (entry.degraded || entry.failures < MAX_CONSECUTIVE_FAILURES) return;
 		entry.degraded = true;
 		console.error(
-			`Calendar Plus: source "${entry.source.id}" stopped being queried after ${String(
+			`Periodic Calendar: source "${entry.source.id}" stopped being queried after ${String(
 				MAX_CONSECUTIVE_FAILURES
 			)} consecutive failures. It will be retried when it calls refresh() or is registered again.`
 		);
@@ -547,6 +547,6 @@ export class CalendarApiRegistry implements CalendarPlusApi {
 	private logError(entry: SourceEntry, hook: string, error: unknown): void {
 		// Drop and menu hooks are not on the render path, so they only get logged;
 		// one bad menu item is not a reason to stop querying the source.
-		console.error(`Calendar Plus: source "${entry.source.id}" threw from ${hook}`, error);
+		console.error(`Periodic Calendar: source "${entry.source.id}" threw from ${hook}`, error);
 	}
 }

@@ -1,6 +1,6 @@
 # Settings reference
 
-Every control in **Settings → Community plugins → Calendar Plus**, in the order
+Every control in **Settings → Community plugins → Periodic Calendar**, in the order
 the tab shows them. What the concepts mean is in the
 [user guide](user-guide.md); this page is the reference for what each control
 does and what it defaults to.
@@ -62,7 +62,7 @@ under its name and stops being queried until it reports new data.
 
 Sources from other plugins are **on** by default: installing a plugin should show
 something. The two built-ins that ship off are only defaulted that way on a vault
-with no stored Calendar Plus settings; an existing configuration is never
+with no stored Periodic Calendar settings; an existing configuration is never
 retroactively changed.
 
 ## Footer
@@ -93,7 +93,7 @@ the toggle stay disabled until it is on.
 
 ## Where the rest of the configuration lives
 
-Calendar Plus stores only what is on this page. Folders, formats and templates for
+Periodic Calendar stores only what is on this page. Folders, formats and templates for
 days, weeks, months, quarters and years belong to the plugins that own them:
 
 - **Days** — Settings → Daily notes (core), or Periodic Notes' `daily`.
