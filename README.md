@@ -36,19 +36,20 @@ It also adds **all six periodic-note levels**, not just daily and weekly.
 
 ## Install
 
-**From the community catalog** — submitted and awaiting listing. Once it is
-through: Settings → Community plugins → Browse → "Periodic Calendar".
+**From the community catalog**, which is the way in: Settings → Community plugins
+→ Browse → "Periodic Calendar" → Install. Updates then arrive through Obsidian
+like any other plugin. The listing is at
+[community.obsidian.md/plugins/periodic-calendar](https://community.obsidian.md/plugins/periodic-calendar).
 
-**With BRAT**, which is how to try it today:
+**With BRAT**, only if you want what is on `main` before it is released:
 
 1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) from the community
    catalog and enable it.
 2. Command palette → **BRAT: Add a beta plugin for testing**.
 3. Enter `alex-roc/periodic-calendar` and confirm.
-4. Enable **Periodic Calendar** in Settings → Community plugins.
 
-BRAT installs from the latest GitHub release and will offer updates as new ones
-appear.
+Not both at once: BRAT and the catalog install into the same folder, and whichever
+updated last is what you get.
 
 **Manually**: download `main.js`, `manifest.json` and `styles.css` from a
 [release](https://github.com/alex-roc/periodic-calendar/releases) into
