@@ -1,4 +1,4 @@
-import { MarkdownRenderer, type App, type Component, type TFile } from 'obsidian';
+import { MarkdownRenderer, setIcon, type App, type Component, type TFile } from 'obsidian';
 import { t } from '../i18n';
 
 export interface PreviewOptions {
@@ -29,28 +29,36 @@ export async function renderPreview(
 	isStale: () => boolean
 ): Promise<boolean> {
 	const next = createDiv();
-	const header = next.createDiv({ cls: 'periodic-calendar-preview-header' });
-	// A note carries its own title, so the label is only for the empty states,
-	// where nothing else says which period was picked.
-	if (!options.file) header.createSpan({ cls: 'periodic-calendar-preview-title', text: options.label });
-	if (options.configured) {
-		const button = header.createEl('button', {
-			cls: 'periodic-calendar-preview-open',
-			text: options.file ? t('previewOpen') : t('previewCreate'),
-		});
-		button.addEventListener('click', options.onOpen);
-	}
 
-	if (!options.file || text === null) {
-		next.createDiv({
-			cls: 'periodic-calendar-preview-empty',
-			text: options.configured ? t('previewEmpty') : t('menuNotConfigured'),
+	if (options.file && text !== null) {
+		// The note carries its own title, so there is no header row: the open icon
+		// sits in the top-right corner, level with that title.
+		const open = next.createDiv({
+			cls: 'periodic-calendar-preview-open clickable-icon',
+			attr: { 'aria-label': t('previewOpen') },
 		});
-	} else {
+		setIcon(open, 'external-link');
+		open.addEventListener('click', options.onOpen);
+
 		const body = next.createDiv({ cls: 'periodic-calendar-preview-body markdown-rendered' });
 		const frontmatter = options.app.metadataCache.getFileCache(options.file)?.frontmatterPosition;
 		const content = frontmatter ? text.slice(frontmatter.end.offset).replace(/^\s*\n/, '') : text;
 		await MarkdownRenderer.render(options.app, content, body, options.file.path, options.component);
+	} else {
+		// Nothing else says which period was picked, so the label stays here.
+		const header = next.createDiv({ cls: 'periodic-calendar-preview-header' });
+		header.createSpan({ cls: 'periodic-calendar-preview-title', text: options.label });
+		if (options.configured) {
+			const create = header.createEl('button', {
+				cls: 'periodic-calendar-preview-create',
+				text: t('previewCreate'),
+			});
+			create.addEventListener('click', options.onOpen);
+		}
+		next.createDiv({
+			cls: 'periodic-calendar-preview-empty',
+			text: options.configured ? t('previewEmpty') : t('menuNotConfigured'),
+		});
 	}
 
 	if (isStale()) return false;

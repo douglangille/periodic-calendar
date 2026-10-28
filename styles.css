@@ -670,10 +670,33 @@ body.is-mobile .periodic-calendar-view {
 
 /* The note picked in the grid, rendered under it. The sidebar tab scrolls, so
    this needs no height of its own. */
+.periodic-calendar-view .periodic-calendar-preview {
+	position: relative;
+}
+
 .periodic-calendar-view .periodic-calendar-preview:not(:empty) {
 	margin-top: var(--size-4-3);
 	padding-top: var(--size-4-2);
 	border-top: 1px solid var(--background-modifier-border);
+}
+
+/* Level with the note's own title, in the top-right corner. */
+.periodic-calendar-view .periodic-calendar-preview-open {
+	position: absolute;
+	top: var(--size-4-3);
+	right: 0;
+	z-index: 1;
+	color: var(--text-faint);
+}
+
+.periodic-calendar-view .periodic-calendar-preview-open:hover {
+	color: var(--text-normal);
+}
+
+/* Keeps a long first heading from running under the icon. */
+.periodic-calendar-preview-body > :first-child {
+	margin-top: 0;
+	padding-right: var(--size-4-8);
 }
 
 .periodic-calendar-preview-header {
@@ -682,12 +705,6 @@ body.is-mobile .periodic-calendar-view {
 	justify-content: space-between;
 	gap: var(--size-4-2);
 	margin-bottom: var(--size-4-2);
-	/* The Open button stays on the right even when the title is not drawn. */
-	min-height: var(--size-4-6);
-}
-
-.periodic-calendar-preview-header .periodic-calendar-preview-open {
-	margin-left: auto;
 }
 
 .periodic-calendar-preview-title {
@@ -700,7 +717,7 @@ body.is-mobile .periodic-calendar-view {
 	white-space: nowrap;
 }
 
-.periodic-calendar-view .periodic-calendar-preview-open {
+.periodic-calendar-view .periodic-calendar-preview-create {
 	flex: 0 0 auto;
 	height: auto;
 	padding: var(--size-2-1) var(--size-4-2);
@@ -710,8 +727,4 @@ body.is-mobile .periodic-calendar-view {
 .periodic-calendar-preview-empty {
 	color: var(--text-faint);
 	font-size: var(--font-ui-small);
-}
-
-.periodic-calendar-preview-body > :first-child {
-	margin-top: 0;
 }
