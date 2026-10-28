@@ -683,6 +683,7 @@ body.is-mobile .periodic-calendar-view {
 /* At the end of the note's own title. */
 .periodic-calendar-view .periodic-calendar-preview-open {
 	display: inline-flex;
+	flex: 0 0 auto;
 	vertical-align: middle;
 	margin-left: var(--size-4-2);
 	color: var(--text-faint);
@@ -713,8 +714,16 @@ body.is-mobile .periodic-calendar-view {
 
 .periodic-calendar-view .periodic-calendar-preview-body h1 {
 	margin-bottom: var(--size-4-2);
+	/* The body is serif, the title stays in the UI face: it is also narrower, which
+	   is what lets the longest date share a line with the icon. */
+	font-family: var(--font-interface);
 	font-size: min(var(--font-ui-large), 5.6cqi);
 	line-height: 1.25;
+	/* A flex row, so a title that does wrap keeps the icon beside its last line
+	   instead of dropping it onto a line of its own. */
+	display: flex;
+	align-items: baseline;
+	justify-content: flex-start;
 }
 
 .periodic-calendar-preview-body > :first-child {
