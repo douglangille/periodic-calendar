@@ -707,12 +707,13 @@ body.is-mobile .periodic-calendar-view {
    "Wednesday, September 30, 2026", still fits one line under the grid; it wraps
    only when the panel is dragged narrower than that. */
 .periodic-calendar-view .periodic-calendar-preview-body {
+	font-family: var(--font-text);
 	font-size: 0.93em;
 }
 
 .periodic-calendar-view .periodic-calendar-preview-body h1 {
 	margin-bottom: var(--size-4-2);
-	font-size: min(var(--font-ui-large), 5cqi);
+	font-size: min(var(--font-ui-large), 5.6cqi);
 	line-height: 1.25;
 }
 
