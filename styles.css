@@ -714,7 +714,10 @@ body.is-mobile .periodic-calendar-view {
    "Wednesday, September 30, 2026", still fits one line under the grid; it wraps
    only when the panel is dragged narrower than that. */
 .periodic-calendar-view .periodic-calendar-preview-body {
-	font-size: 1em;
+	/* What Obsidian sets a sidebar list's text in (`--nav-item-size`). The view
+	   inherits the larger `--font-ui-medium` from the body, which is what made the
+	   panel look like a document dropped into a sidebar. */
+	font-size: var(--font-ui-small);
 }
 
 .periodic-calendar-view .periodic-calendar-preview-body h1 {
@@ -724,6 +727,8 @@ body.is-mobile .periodic-calendar-view {
 	   the icon. */
 	font-family: var(--font-interface);
 	font-size: min(var(--font-ui-large), 5.6cqi);
+	/* Obsidian's own pane and view titles are semibold; headings default to 700. */
+	font-weight: var(--font-semibold);
 	line-height: 1.25;
 	/* A flex row, so a title that does wrap keeps the icon beside its last line
 	   instead of dropping it onto a line of its own. */
