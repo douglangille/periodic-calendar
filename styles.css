@@ -702,6 +702,20 @@ body.is-mobile .periodic-calendar-view {
 	color: var(--text-normal);
 }
 
+/* The panel is a sidebar, so the type steps down from the editor's. The title is
+   sized from the calendar's own width (it is a size container) so the longest date,
+   "Wednesday, September 30, 2026", still fits one line under the grid; it wraps
+   only when the panel is dragged narrower than that. */
+.periodic-calendar-view .periodic-calendar-preview-body {
+	font-size: 0.93em;
+}
+
+.periodic-calendar-view .periodic-calendar-preview-body h1 {
+	margin-bottom: var(--size-4-2);
+	font-size: min(var(--font-ui-large), 5cqi);
+	line-height: 1.25;
+}
+
 .periodic-calendar-preview-body > :first-child {
 	margin-top: 0;
 }
