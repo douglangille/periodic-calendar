@@ -682,6 +682,12 @@ body.is-mobile .periodic-calendar-view {
 	justify-content: space-between;
 	gap: var(--size-4-2);
 	margin-bottom: var(--size-4-2);
+	/* The Open button stays on the right even when the title is not drawn. */
+	min-height: var(--size-4-6);
+}
+
+.periodic-calendar-preview-header .periodic-calendar-preview-open {
+	margin-left: auto;
 }
 
 .periodic-calendar-preview-title {

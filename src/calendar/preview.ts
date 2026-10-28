@@ -30,7 +30,9 @@ export async function renderPreview(
 ): Promise<boolean> {
 	const next = createDiv();
 	const header = next.createDiv({ cls: 'periodic-calendar-preview-header' });
-	header.createSpan({ cls: 'periodic-calendar-preview-title', text: options.label });
+	// A note carries its own title, so the label is only for the empty states,
+	// where nothing else says which period was picked.
+	if (!options.file) header.createSpan({ cls: 'periodic-calendar-preview-title', text: options.label });
 	if (options.configured) {
 		const button = header.createEl('button', {
 			cls: 'periodic-calendar-preview-open',
