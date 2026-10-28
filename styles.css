@@ -481,6 +481,12 @@
 	line-height: 6px;
 }
 
+/* Every cell renders the row, but with no source contributing a dot it is empty
+   and its 6px floor plus the cell's gap would push the number off-center. */
+.periodic-calendar-view .dot-container:empty {
+	display: none;
+}
+
 /* 6 px, which is the original Calendar's dot size. */
 .periodic-calendar-view .dot {
 	--periodic-calendar-dot-color: var(--color-dot);
