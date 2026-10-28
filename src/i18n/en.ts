@@ -67,7 +67,7 @@ export default {
 	settingWeekNumbersDesc: 'Add a column with the week number, which opens the weekly note.',
 	settingClickName: 'Clicking a cell',
 	settingClickDesc:
-		'Preview shows the note in a panel under the calendar and leaves your open tabs alone. Open note opens it in the main pane, as a click always used to. Clicking with the modifier key held opens it either way.',
+		'Preview shows the note in a panel under the calendar on the first click and opens it on a second click on the same cell. Open note opens it in the main pane on every click, as a click always used to. Clicking with the modifier key held opens it either way.',
 	settingConfirmName: 'Confirm before creating a note',
 	settingConfirmDesc: 'Ask first when a click would create a note that does not exist yet.',
 	settingShortcutsName: 'Show period shortcuts',

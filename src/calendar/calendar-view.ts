@@ -449,9 +449,14 @@ export class CalendarView extends ItemView implements HoverParent {
 		evt: MouseEvent | KeyboardEvent
 	): void {
 		this.host.notifyCellClick?.(date, granularity, evt);
-		// Cmd/Ctrl-click opens even in preview mode: it is how you ask for the note
-		// itself, in a new tab, without going through the preview's button.
-		if (this.host.settings.clickAction === 'preview' && !Keymap.isModEvent(evt)) {
+		// Preview mode is two clicks: the first selects the period and shows its note,
+		// a second on the ringed cell opens it (or offers to create it). Cmd/Ctrl-click
+		// opens at once, in a new tab, without selecting first.
+		if (
+			this.host.settings.clickAction === 'preview' &&
+			!Keymap.isModEvent(evt) &&
+			!this.isActivePeriod(date, granularity)
+		) {
 			this.select(date, granularity);
 			return;
 		}

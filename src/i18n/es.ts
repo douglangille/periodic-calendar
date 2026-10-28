@@ -66,7 +66,7 @@ const es: Record<keyof typeof en, string> = {
 	settingWeekNumbersDesc: 'Añade una columna con el número de semana, que abre la nota semanal.',
 	settingClickName: 'Al hacer clic en una celda',
 	settingClickDesc:
-		'La vista previa muestra la nota en un panel bajo el calendario y no toca tus pestañas abiertas. Abrir la nota la abre en el panel principal, como siempre. Cmd o Ctrl y clic la abre en cualquier caso.',
+		'La vista previa muestra la nota en un panel bajo el calendario con el primer clic y la abre con un segundo clic en la misma celda. Abrir la nota la abre en el panel principal con cada clic, como siempre. Cmd o Ctrl y clic la abre en cualquier caso.',
 	settingConfirmName: 'Confirmar antes de crear una nota',
 	settingConfirmDesc: 'Preguntar antes de que un clic cree una nota que todavía no existe.',
 	settingShortcutsName: 'Mostrar los atajos de periodo',
