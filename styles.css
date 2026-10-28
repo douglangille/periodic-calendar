@@ -709,10 +709,9 @@ body.is-mobile .periodic-calendar-view {
 	color: var(--text-normal);
 }
 
-/* The panel is a sidebar, so it uses the sidebar's face and size. The title is
-   sized from the calendar's own width (it is a size container) so the longest date,
-   "Wednesday, September 30, 2026", still fits one line under the grid; it wraps
-   only when the panel is dragged narrower than that. */
+/* Obsidian's own sidebar type: the note's text at the size of a sidebar list, its
+   title at the size and weight of a pane title. The note's own document spacing
+   (line height, paragraph margins) is left as it is. */
 .periodic-calendar-view .periodic-calendar-preview-body {
 	/* What Obsidian sets a sidebar list's text in (`--nav-item-size`). The view
 	   inherits the larger `--font-ui-medium` from the body, which is what made the
@@ -722,14 +721,11 @@ body.is-mobile .periodic-calendar-view {
 
 .periodic-calendar-view .periodic-calendar-preview-body h1 {
 	margin-bottom: var(--size-4-2);
-	/* The UI face, like the rest of the sidebar, even if a theme gives headings
-	   another one: it is narrow enough for the longest date to share a line with
-	   the icon. */
+	/* The UI face, even if a theme gives headings another one. */
 	font-family: var(--font-interface);
-	font-size: min(var(--font-ui-large), 5.6cqi);
-	/* Obsidian's own pane and view titles are semibold; headings default to 700. */
+	font-size: var(--font-ui-medium);
 	font-weight: var(--font-semibold);
-	line-height: 1.25;
+	line-height: var(--line-height-tight);
 	/* A flex row, so a title that does wrap keeps the icon beside its last line
 	   instead of dropping it onto a line of its own. */
 	display: flex;
