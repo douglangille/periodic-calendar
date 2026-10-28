@@ -709,19 +709,19 @@ body.is-mobile .periodic-calendar-view {
 	color: var(--text-normal);
 }
 
-/* The panel is a sidebar, so the type steps down from the editor's. The title is
+/* The panel is a sidebar, so it uses the sidebar's face and size. The title is
    sized from the calendar's own width (it is a size container) so the longest date,
    "Wednesday, September 30, 2026", still fits one line under the grid; it wraps
    only when the panel is dragged narrower than that. */
 .periodic-calendar-view .periodic-calendar-preview-body {
-	font-family: var(--font-text);
-	font-size: 0.93em;
+	font-size: 1em;
 }
 
 .periodic-calendar-view .periodic-calendar-preview-body h1 {
 	margin-bottom: var(--size-4-2);
-	/* The body is serif, the title stays in the UI face: it is also narrower, which
-	   is what lets the longest date share a line with the icon. */
+	/* The UI face, like the rest of the sidebar, even if a theme gives headings
+	   another one: it is narrow enough for the longest date to share a line with
+	   the icon. */
 	font-family: var(--font-interface);
 	font-size: min(var(--font-ui-large), 5.6cqi);
 	line-height: 1.25;
