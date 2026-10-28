@@ -665,3 +665,47 @@ body.is-mobile .periodic-calendar-view {
 		text-transform: none;
 	}
 }
+
+/* ------------------------------------------------------------------ preview */
+
+/* The note picked in the grid, rendered under it. The sidebar tab scrolls, so
+   this needs no height of its own. */
+.periodic-calendar-view .periodic-calendar-preview:not(:empty) {
+	margin-top: var(--size-4-3);
+	padding-top: var(--size-4-2);
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.periodic-calendar-preview-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--size-4-2);
+	margin-bottom: var(--size-4-2);
+}
+
+.periodic-calendar-preview-title {
+	min-width: 0;
+	overflow: hidden;
+	color: var(--text-normal);
+	font-size: var(--font-ui-medium);
+	font-weight: var(--font-semibold);
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.periodic-calendar-view .periodic-calendar-preview-open {
+	flex: 0 0 auto;
+	height: auto;
+	padding: var(--size-2-1) var(--size-4-2);
+	font-size: var(--font-ui-smaller);
+}
+
+.periodic-calendar-preview-empty {
+	color: var(--text-faint);
+	font-size: var(--font-ui-small);
+}
+
+.periodic-calendar-preview-body > :first-child {
+	margin-top: 0;
+}

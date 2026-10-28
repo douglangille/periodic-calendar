@@ -26,12 +26,17 @@ export const DEFAULT_DISABLED_SOURCES: readonly string[] = [WORD_COUNT_SOURCE_ID
 /** Ceiling for the footer's card limit, so the control cannot ask for absurdity. */
 export const MAX_SUMMARY_CARDS = 12;
 
+/** What a click on a cell does: open its note, or show it in the preview below. */
+export type ClickAction = 'open' | 'preview';
+
 export interface PeriodicCalendarSettings {
 	/** `locale` keeps whatever the active moment locale says. */
 	weekStart: WeekStart;
 	/** A moment locale code, or `system-default`. */
 	localeOverride: string;
 	showWeekNumbers: boolean;
+	/** Cmd/Ctrl-click always opens, whatever this says. */
+	clickAction: ClickAction;
 	confirmBeforeCreate: boolean;
 	/** The year/semester/quarter/month shortcut row under the header. */
 	showPeriodShortcuts: boolean;
@@ -75,6 +80,7 @@ export const DEFAULT_SETTINGS: PeriodicCalendarSettings = {
 	weekStart: 'locale',
 	localeOverride: 'system-default',
 	showWeekNumbers: true,
+	clickAction: 'preview',
 	confirmBeforeCreate: true,
 	showPeriodShortcuts: true,
 	// A shaded cell is the cheapest way to show a magnitude in a panel where the
@@ -191,6 +197,13 @@ function valueDisplayOptions(): Record<string, string> {
 	};
 }
 
+function clickActionOptions(): Record<string, string> {
+	return {
+		preview: t('optionClickPreview'),
+		open: t('optionClickOpen'),
+	};
+}
+
 function hoverModeOptions(): Record<string, string> {
 	return {
 		preview: t('optionHoverPreview'),
@@ -253,6 +266,16 @@ export class PeriodicCalendarSettingTab extends PluginSettingTab {
 				type: 'group',
 				heading: t('settingsGroupNotes'),
 				items: [
+					{
+						name: t('settingClickName'),
+						desc: t('settingClickDesc'),
+						control: {
+							type: 'dropdown',
+							key: 'clickAction',
+							defaultValue: DEFAULT_SETTINGS.clickAction,
+							options: clickActionOptions(),
+						},
+					},
 					{
 						name: t('settingConfirmName'),
 						desc: t('settingConfirmDesc'),
@@ -516,6 +539,18 @@ export class PeriodicCalendarSettingTab extends PluginSettingTab {
 			});
 
 		new Setting(containerEl).setName(t('settingsGroupNotes')).setHeading();
+
+		new Setting(containerEl)
+			.setName(t('settingClickName'))
+			.setDesc(t('settingClickDesc'))
+			.addDropdown((dropdown) => {
+				dropdown.addOptions(clickActionOptions());
+				dropdown.setValue(settings.clickAction);
+				dropdown.onChange((value) => {
+					settings.clickAction = value as ClickAction;
+					commit();
+				});
+			});
 
 		new Setting(containerEl)
 			.setName(t('settingConfirmName'))

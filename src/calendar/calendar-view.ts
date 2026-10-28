@@ -25,6 +25,7 @@ import type { PeriodicCalendarSettings } from '../settings';
 import type { CalendarCell } from './day-cell';
 import { renderFooter } from './footer';
 import { renderHeader } from './header';
+import { renderPreview } from './preview';
 import {
 	focusCell,
 	locateCell,
@@ -34,7 +35,7 @@ import {
 	type MonthGrid,
 } from './month-grid';
 
-export const CALENDAR_VIEW_TYPE = 'periodic-calendar';
+export const CALENDAR_VIEW_TYPE = 'periodic-calendar-plus';
 
 /** How often "today" is re-checked so the highlight survives midnight. */
 const HEARTBEAT_MS = 60_000;
@@ -104,12 +105,19 @@ export class CalendarView extends ItemView implements HoverParent {
 	private headerEl: HTMLElement | null = null;
 	private gridEl: HTMLElement | null = null;
 	private footerEl: HTMLElement | null = null;
+	private previewEl: HTMLElement | null = null;
+	/** The period last picked in `preview` mode; null until something is clicked. */
+	private selected: { granularity: Granularity; date: Moment } | null = null;
+	/** The note the preview currently shows, so edits to it can refresh it. */
+	private previewPath: string | null = null;
+	private previewToken = 0;
 	private grid: MonthGrid | null = null;
 	/** The header's period buttons, which are decorated like any other cell. */
 	private headerCells: CalendarCell[] = [];
 	private activePeriod: { granularity: Granularity; date: Moment } | null = null;
 	private dropTarget: CalendarCell | null = null;
 	private readonly repaintSoon = debounce(() => this.repaint(), 120, true);
+	private readonly refreshPreviewSoon = debounce(() => void this.refreshPreview(), 200, true);
 
 	constructor(leaf: WorkspaceLeaf, host: CalendarViewHost) {
 		super(leaf);
@@ -137,6 +145,7 @@ export class CalendarView extends ItemView implements HoverParent {
 		// Created once and emptied on every repaint, like the header and the grid,
 		// so the strip can never end up duplicated below the calendar.
 		this.footerEl = root.createDiv({ cls: 'periodic-calendar-footer is-empty' });
+		this.previewEl = root.createDiv({ cls: 'periodic-calendar-preview' });
 
 		// One delegated listener per event type on a container that outlives every
 		// repaint, so rebuilding the grid can never leak handlers.
@@ -154,9 +163,29 @@ export class CalendarView extends ItemView implements HoverParent {
 		this.registerEvent(
 			this.app.workspace.on('active-leaf-change', () => this.refreshActiveState())
 		);
-		this.registerEvent(this.app.vault.on('create', () => this.repaintSoon()));
-		this.registerEvent(this.app.vault.on('delete', () => this.repaintSoon()));
-		this.registerEvent(this.app.vault.on('rename', () => this.repaintSoon()));
+		this.registerEvent(
+			this.app.vault.on('create', () => {
+				this.repaintSoon();
+				this.refreshPreviewSoon();
+			})
+		);
+		this.registerEvent(
+			this.app.vault.on('delete', () => {
+				this.repaintSoon();
+				this.refreshPreviewSoon();
+			})
+		);
+		this.registerEvent(
+			this.app.vault.on('rename', () => {
+				this.repaintSoon();
+				this.refreshPreviewSoon();
+			})
+		);
+		this.registerEvent(
+			this.app.vault.on('modify', (file) => {
+				if (file.path === this.previewPath) this.refreshPreviewSoon();
+			})
+		);
 
 		// The heartbeat keeps "today" honest across midnight and picks up changes
 		// to the periodic note configuration without a reload.
@@ -176,6 +205,7 @@ export class CalendarView extends ItemView implements HoverParent {
 		this.headerEl = null;
 		this.gridEl = null;
 		this.footerEl = null;
+		this.previewEl = null;
 		this.contentEl.empty();
 		return Promise.resolve();
 	}
@@ -256,6 +286,10 @@ export class CalendarView extends ItemView implements HoverParent {
 		if (hadCellFocus && tabStop) focusCell(this.grid, tabStop);
 
 		this.refreshDecorations();
+		// Not on every repaint: moving between months must not re-render the note.
+		// Only when the mode changed under the pane, or the pane was never filled.
+		const preview = this.host.settings.clickAction === 'preview';
+		if (preview !== (this.previewEl?.childElementCount !== 0)) void this.refreshPreview();
 	}
 
 	/** Re-queries the decoration seam for every visible cell, and the footer. */
@@ -347,6 +381,13 @@ export class CalendarView extends ItemView implements HoverParent {
 	}
 
 	private readActivePeriod(): void {
+		// In preview mode the ring marks what you picked, not the note that happens
+		// to be open in the main pane.
+		if (this.host.settings.clickAction === 'preview') {
+			const { date, granularity } = this.selected ?? { date: this.today, granularity: 'day' as const };
+			this.activePeriod = { granularity, date: startOfPeriod(date, granularity) };
+			return;
+		}
 		const file = this.app.workspace.getActiveFile();
 		this.activePeriod = file ? parsePeriodicNote(file, this.host.configs) : null;
 	}
@@ -408,7 +449,53 @@ export class CalendarView extends ItemView implements HoverParent {
 		evt: MouseEvent | KeyboardEvent
 	): void {
 		this.host.notifyCellClick?.(date, granularity, evt);
+		// Cmd/Ctrl-click opens even in preview mode: it is how you ask for the note
+		// itself, in a new tab, without going through the preview's button.
+		if (this.host.settings.clickAction === 'preview' && !Keymap.isModEvent(evt)) {
+			this.select(date, granularity);
+			return;
+		}
 		void this.openPeriod(date, granularity, evt);
+	}
+
+	/** `preview` mode: make this period the selected one and show its note. */
+	private select(date: Moment, granularity: Granularity): void {
+		this.selected = { granularity, date: startOfPeriod(date, granularity).clone() };
+		this.refreshActiveState();
+		void this.refreshPreview();
+	}
+
+	/** Renders the selected period's note, or today's, into the pane below. */
+	private async refreshPreview(): Promise<void> {
+		const el = this.previewEl;
+		if (!el) return;
+		const token = ++this.previewToken;
+		if (this.host.settings.clickAction !== 'preview') {
+			this.previewPath = null;
+			el.empty();
+			return;
+		}
+
+		const { date, granularity } = this.selected ?? { date: this.today, granularity: 'day' as const };
+		const config = this.host.configs.get(granularity);
+		const file = config.enabled ? getPeriodicNote(this.app, date, config) : null;
+		this.previewPath = file?.path ?? null;
+		const text = file ? await this.app.vault.cachedRead(file) : null;
+		if (token !== this.previewToken) return;
+
+		await renderPreview(
+			el,
+			{
+				app: this.app,
+				component: this,
+				label: periodLabel(date, granularity),
+				file,
+				configured: config.enabled,
+				onOpen: () => void this.openPeriod(date, granularity, new MouseEvent('click')),
+			},
+			text,
+			() => token !== this.previewToken || !el.isConnected
+		);
 	}
 
 	private onCellDragOver(evt: DragEvent): void {

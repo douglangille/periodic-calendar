@@ -34,6 +34,9 @@ export default {
 	menuOpenToTheRight: 'Open to the right',
 	menuDelete: 'Delete',
 	menuCreateNote: 'Create note',
+	previewOpen: 'Open',
+	previewCreate: 'Create',
+	previewEmpty: 'No note for this period yet.',
 	menuNotConfigured: 'No note is configured for this period',
 
 	// --- Notices and the confirmation modal ----------------------------------
@@ -62,6 +65,9 @@ export default {
 	settingLocaleDesc: 'Render the calendar in a language other than the one Obsidian uses.',
 	settingWeekNumbersName: 'Show week numbers',
 	settingWeekNumbersDesc: 'Add a column with the week number, which opens the weekly note.',
+	settingClickName: 'Clicking a cell',
+	settingClickDesc:
+		'Preview shows the note in a panel under the calendar and leaves your open tabs alone. Open note opens it in the main pane, as a click always used to. Clicking with the modifier key held opens it either way.',
 	settingConfirmName: 'Confirm before creating a note',
 	settingConfirmDesc: 'Ask first when a click would create a note that does not exist yet.',
 	settingShortcutsName: 'Show period shortcuts',
@@ -101,6 +107,8 @@ export default {
 	optionValueHidden: 'Hidden',
 	optionValueNumber: 'As a number',
 	optionValueIntensity: 'As background intensity',
+	optionClickPreview: 'Show a preview below',
+	optionClickOpen: 'Open the note',
 	optionHoverPreview: 'Note preview',
 	optionHoverSummary: 'Cell summary',
 	optionHoverNone: 'Nothing',

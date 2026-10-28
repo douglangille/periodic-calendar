@@ -77,7 +77,7 @@ export default class PeriodicCalendarPlugin
 	private opening: Promise<void> | null = null;
 
 	/**
-	 * The public API, reachable at `app.plugins.plugins['periodic-calendar'].api`.
+	 * The public API, reachable at `app.plugins.plugins['periodic-calendar-plus'].api`.
 	 * See `src/api/types.ts` for the contract.
 	 */
 	readonly api: PeriodicCalendarApi = this.registry;

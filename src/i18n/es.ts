@@ -33,6 +33,9 @@ const es: Record<keyof typeof en, string> = {
 	menuOpenToTheRight: 'Abrir a la derecha',
 	menuDelete: 'Eliminar',
 	menuCreateNote: 'Crear la nota',
+	previewOpen: 'Abrir',
+	previewCreate: 'Crear',
+	previewEmpty: 'Este periodo todavía no tiene nota.',
 	menuNotConfigured: 'Este periodo no tiene ninguna nota configurada',
 
 	// --- Avisos y el modal de confirmación -----------------------------------
@@ -61,6 +64,9 @@ const es: Record<keyof typeof en, string> = {
 	settingLocaleDesc: 'Mostrar el calendario en un idioma distinto al de Obsidian.',
 	settingWeekNumbersName: 'Mostrar los números de semana',
 	settingWeekNumbersDesc: 'Añade una columna con el número de semana, que abre la nota semanal.',
+	settingClickName: 'Al hacer clic en una celda',
+	settingClickDesc:
+		'La vista previa muestra la nota en un panel bajo el calendario y no toca tus pestañas abiertas. Abrir la nota la abre en el panel principal, como siempre. Cmd o Ctrl y clic la abre en cualquier caso.',
 	settingConfirmName: 'Confirmar antes de crear una nota',
 	settingConfirmDesc: 'Preguntar antes de que un clic cree una nota que todavía no existe.',
 	settingShortcutsName: 'Mostrar los atajos de periodo',
@@ -101,6 +107,8 @@ const es: Record<keyof typeof en, string> = {
 	optionValueHidden: 'Oculto',
 	optionValueNumber: 'Como número',
 	optionValueIntensity: 'Como intensidad de fondo',
+	optionClickPreview: 'Mostrar una vista previa debajo',
+	optionClickOpen: 'Abrir la nota',
 	optionHoverPreview: 'La vista previa de la nota',
 	optionHoverSummary: 'El resumen de la celda',
 	optionHoverNone: 'Nada',
