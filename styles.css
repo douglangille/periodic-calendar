@@ -680,22 +680,33 @@ body.is-mobile .periodic-calendar-view {
 	border-top: 1px solid var(--background-modifier-border);
 }
 
-/* Level with the note's own title, in the top-right corner. */
+/* At the end of the note's own title. */
 .periodic-calendar-view .periodic-calendar-preview-open {
+	display: inline-flex;
+	vertical-align: middle;
+	margin-left: var(--size-4-2);
+	color: var(--text-faint);
+	-webkit-text-fill-color: currentcolor;
+}
+
+/* A note with no leading title: the icon sits in the corner instead. */
+.periodic-calendar-view .periodic-calendar-preview-open.is-floating {
 	position: absolute;
 	top: var(--size-4-3);
 	right: 0;
 	z-index: 1;
-	color: var(--text-faint);
+	margin-left: 0;
 }
 
 .periodic-calendar-view .periodic-calendar-preview-open:hover {
 	color: var(--text-normal);
 }
 
-/* Keeps a long first heading from running under the icon. */
 .periodic-calendar-preview-body > :first-child {
 	margin-top: 0;
+}
+
+.periodic-calendar-preview-body.has-floating-open > :first-child {
 	padding-right: var(--size-4-8);
 }
 

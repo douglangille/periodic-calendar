@@ -31,19 +31,29 @@ export async function renderPreview(
 	const next = createDiv();
 
 	if (options.file && text !== null) {
-		// The note carries its own title, so there is no header row: the open icon
-		// sits in the top-right corner, level with that title.
-		const open = next.createDiv({
+		const body = next.createDiv({ cls: 'periodic-calendar-preview-body markdown-rendered' });
+		const frontmatter = options.app.metadataCache.getFileCache(options.file)?.frontmatterPosition;
+		const content = frontmatter ? text.slice(frontmatter.end.offset).replace(/^\s*\n/, '') : text;
+		await MarkdownRenderer.render(options.app, content, body, options.file.path, options.component);
+
+		// The note carries its own title, so the open icon rides at the end of it.
+		// A note that does not start with a title gets the icon in the corner.
+		const open = createDiv({
 			cls: 'periodic-calendar-preview-open clickable-icon',
 			attr: { 'aria-label': t('previewOpen') },
 		});
 		setIcon(open, 'external-link');
 		open.addEventListener('click', options.onOpen);
-
-		const body = next.createDiv({ cls: 'periodic-calendar-preview-body markdown-rendered' });
-		const frontmatter = options.app.metadataCache.getFileCache(options.file)?.frontmatterPosition;
-		const content = frontmatter ? text.slice(frontmatter.end.offset).replace(/^\s*\n/, '') : text;
-		await MarkdownRenderer.render(options.app, content, body, options.file.path, options.component);
+		const title = body.querySelector('h1');
+		const startsWithTitle =
+			title !== null && body.textContent.trimStart().startsWith(title.textContent.trim());
+		if (title && startsWithTitle) {
+			title.append(open);
+		} else {
+			open.addClass('is-floating');
+			body.addClass('has-floating-open');
+			next.prepend(open);
+		}
 	} else {
 		// Nothing else says which period was picked, so the label stays here.
 		const header = next.createDiv({ cls: 'periodic-calendar-preview-header' });
